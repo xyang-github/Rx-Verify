@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="main_content">
+        <div id="main_desc">
+            <h1>Rx Verify</h1>
+
+            <div id="main_desc text">
+                Welcome to Rx Verify, a one-stop shop for patients to manage their medication history.<br><br>
+                Features:
+                <ul>
+                    <li>Manage a list of active and past medications</li>
+                    <li>Get information on medications you are currently taking</li>
+                    <li>Get access to the drug interaction tool</li>
+                    <li>Generate a report of your medication history</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- image from Unsplash: https://unsplash.com/photos/QNrjcp90tVc -->
+        <img src="{{ url_for('static', filename='img/splash_img.jpg') }}" alt="pills arranged into a heart">
+    </div>
+{% endblock %}

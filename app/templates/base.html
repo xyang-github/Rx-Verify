@@ -1,3 +1,41 @@
 {% extends "bootstrap/base.html" %}
 
-{% block title %}Rx Verify{% endblock %}
+{% block styles %}
+{{ super() }}
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+{% endblock %}
+
+<!-- Navigation bar -->
+{% block navbar %}
+<div class="navbar navbar-default">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="">Main</a></li>
+            <li><a href="">Drug Interactions</a></li>
+
+{#            {% if current_user.is_authenticated  %}#}
+                <li><a href="">Medications</a></li>
+                <li><a href="">Report</a></li>
+                <li><a href="">Logout</a></li>
+{#            {% else %}#}
+                <li><a href="">Login</a></li>
+                <li><a href="">Register</a></li>
+{#            {% endif %}#}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+<!-- Where the main content of each page goes -->
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}

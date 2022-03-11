@@ -1,0 +1,48 @@
+h1 {
+    font-family: Noto-Bold, sans-serif;
+    font-size: 92px;
+    text-align: center;
+}
+
+body {
+    font-family: Noto-Regular, sans-serif;
+}
+
+#main_content {
+    position: relative;
+    margin: auto;
+    width: 100%;
+}
+
+#main_desc {
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%,-50%);
+    width: 100%;
+    border: 2px solid black;
+}
+
+#main_desc\ text{
+    position: relative;
+    margin: auto 0;
+    left: 50%;
+    transform: translate(-50%);
+    width: 300px;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+    opacity: 0.2;
+}
+
+@font-face {
+  font-family: Noto-Bold;
+  src: url("font/NotoSans-Bold.ttf");
+}
+
+@font-face {
+  font-family: Noto-Regular;
+  src: url("font/NotoSans-Regular.ttf");
+}
