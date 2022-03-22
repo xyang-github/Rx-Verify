@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+<h1>User Profile</h1>
+
+<form method="POST">
+    <div class="mb-3">
+        <label for="first_name" class="form-label">{{ form.fname.label }}</label>
+        {{ form.fname(class="form-control", id="first_name") }}
+    </div>
+
+    <div class="mb-3">
+        <label for="last_name" class="form-label">{{ form.lname.label }}</label>
+        {{ form.lname(class="form-control", id="last_name") }}
+    </div>
+
+    <div class="mb-3">
+        <label for="middle_initial" class="form-label">{{ form.minitial.label }}</label>
+        {{ form.minitial(class="form-control", id="middle_initial") }}
+    </div>
+
+    <div class="mb-3">
+        <label for="date_of_birth" class="form-label">{{ form.dob.label }}</label>
+        {{ form.dob(class="form-control", id="date_of_birth") }}
+    </div>
+
+
+    {{ form.edit(class="btn btn-info") }}
+</form>
+
+{% endblock %}
