@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% block page_content %}
-<h1>Profile</h1>
+<h1>Update Profile</h1>
 
 <form method="POST">
+{{ form.csrf_token }}
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-5">
@@ -37,24 +38,14 @@
     </div>
 
     <div class="row row_margin">
-        <div class="col-sm-2">
-            {{ form.edit(class="btn btn-info") }}
+        <div class="col-sm-3">
+            {{ form.update(class="btn btn-primary") }}
+            {{ form.cancel(class="btn btn-danger") }}
         </div>
 
-        <div class="col-sm-10"></div>
+        <div class="col-sm-9"></div>
     </div>
 </div>
 
 </form>
-
-<script type="text/javascript">
-    window.onload = function () {
-        document.getElementById("first_name").readOnly = true;
-        document.getElementById("last_name").readOnly = true;
-        document.getElementById("middle_initial").readOnly = true;
-        document.getElementById("date_of_birth").readOnly = true;
-        document.getElementById("weight").readOnly = true;
-    }
-</script>
-
 {% endblock %}

@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, g
 from flask_bootstrap import Bootstrap
 from config import *
 
@@ -21,5 +21,8 @@ def create_app(config_name):
 
     from .profile import profile as profile_blueprint
     app.register_blueprint(profile_blueprint)
+
+    from .db import db as db_blueprint
+    app.register_blueprint(db_blueprint)
 
     return app
