@@ -8,5 +8,7 @@ def profile():
     """Display profile page"""
 
     profile_form = PatientProfileForm()
+    # retrieve patient information
+    # set form objects to patient information
 
     return render_template("profile.html", form=profile_form)
