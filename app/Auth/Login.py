@@ -1,11 +1,9 @@
-from flask import Flask
-app = Flask(_name_)
+from flask import render_template
+from flask_mail import Mail
+from . import main
 
-class NameForm(FlaskForm):
-    name = StringField('What is your name?', validators = [DataRequired()])
-    submit = SbumitField ('Submit')
+mail = Mail(main)
 
-@app.route('/', methods=['GET','POST'])
+@main.route("/", methods=["GET", "POST"])
 def index():
-    name = None
-    form = NameForm()
+    return render_template("index.html")
