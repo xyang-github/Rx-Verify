@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<h1>Register</h1>
+
+<form method="POST">
+{{ form.csrf_token }}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Account Information</h3>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="email" class="form-label">{{ form.email.label }}</label>
+                {{ form.email(class="form-control", id="email") }}
+            </div>
+        </div>
+
+        <div class="row row_margin">
+            <div class="col-md-6">
+                <label for="password" class="form-label">{{ form.password.label }}</label>
+                {{ form.password(class="form-control", id="password") }}
+            </div>
+
+            <div class="col-md-6">
+                <label for="password_confirm" class="form-label">{{ form.password2.label }}</label>
+                {{ form.password2(class="form-control", id="password_confirm") }}
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Patient Information</h3>
+                <hr>
+            </div>
+        </div>
+
+        <div class="row row_margin">
+            <div class="col-md-5">
+                <label for="first_name" class="form-label">{{ form.fname.label }}</label>
+                {{ form.fname(class="form-control", id="first_name") }}
+            </div>
+
+            <div class="col-md-5">
+                <label for="last_name" class="form-label">{{ form.lname.label }}</label>
+                {{ form.lname(class="form-control", id="last_name") }}
+            </div>
+
+            <div class="col-md-2">
+                <label for="middle_initial" class="form-label">{{ form.minitial.label }}</label>
+                {{ form.minitial(class="form-control", id="middle_initial") }}
+            </div>
+        </div>
+
+        <div class="row row_margin">
+            <div class="col-sm-5">
+                <label for="date_of_birth" class="form-label">{{ form.dob.label }}</label>
+                {{ form.dob(class="form-control", id="date_of_birth") }}
+            </div>
+
+            <div class="col-sm-2">
+                <label for="weight" class="form-label">{{ form.weight.label }}</label>
+                {{ form.weight(class="form-control", id="weight") }}
+            </div>
+
+            <div class="col-sm-5">
+                <label for="allergies" class="form-label">{{ form.allergies.label }}</label>
+                {{ form.allergies(class="form-control", id="allergies") }}
+            </div>
+        </div>
+
+        <div class="row row_margin">
+            <div class="col-sm-2">
+                {{form.submit(class="btn btn-primary")}}
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
