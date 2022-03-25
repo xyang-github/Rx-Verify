@@ -19,6 +19,7 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     """Additional configuration setting for app testing"""
     TESTING = True
+    WTF_CSRF_ENABLED = False
 
 
 config = {
