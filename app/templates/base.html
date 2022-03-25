@@ -10,7 +10,7 @@
 <div class="navbar navbar-default">
     <div class="container-fluid">
         <ul class="nav navbar-nav">
-            <li class="active"><a href="">Main</a></li>
+            <li class="active"><a href="{{ url_for("main.index") }}">Main</a></li>
             <li><a href="">Drug Interactions</a></li>
 
 {#            {% if current_user.is_authenticated  %}#}
@@ -19,7 +19,7 @@
                 <li><a href="">Logout</a></li>
 {#            {% else %}#}
                 <li><a href="">Login</a></li>
-                <li><a href="">Register</a></li>
+                <li><a href="{{ url_for("auth.register")}}">Register</a></li>
 {#            {% endif %}#}
         </ul>
     </div>
@@ -29,6 +29,16 @@
 <!-- Where the main content of each page goes -->
 {% block content %}
 <div class="container">
+
+    <!-- Displays form validation errors;
+    source: https://stackoverflow.com/questions/6463035/wtforms-getting-the-errors/20644520#20644520 -->
+    {% for field, errors in form.errors.items() %}
+    <div class="alert alert-error">
+        {{ form[field].label }}: {{ ', '.join(errors) }}
+    </div>
+    {% endfor %}
+
+
     {% for message in get_flashed_messages() %}
     <div class="alert alert-warning">
         <button type="button" class="close" data-dismiss="alert">&times;</button>

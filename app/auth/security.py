@@ -27,3 +27,16 @@ class Security:
         serializer = Serializer(current_app.config['SECRET_KEY'], expiration)
         return serializer.dumps({'confirm': id}).decode('utf-8')
 
+    def confirm(self, id, token):
+        """If confirmation token is valid, will change 'confirmed' value to True"""
+        serializer = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = serializer.loads(token.encode('utf-8'))
+        except:
+            return False
+
+        if data.get('confirm') != id:
+            return False
+        else:
+            return True
+

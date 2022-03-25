@@ -1,10 +1,12 @@
-from flask import Flask, g
+from flask import Flask
 from flask_bootstrap import Bootstrap
 from config import *
+from flask_mail import Mail
 
 
 # Start initializing extensions here
 bootstrap = Bootstrap()
+mail = Mail()
 
 
 def create_app(config_name):
@@ -14,6 +16,7 @@ def create_app(config_name):
 
     # Finish initializing extensions here
     bootstrap.init_app(app)
+    mail.init_app(app)
 
     # Register blueprints to app
     from .auth import auth as auth_blueprint

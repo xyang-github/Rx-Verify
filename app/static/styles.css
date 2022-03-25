@@ -51,3 +51,7 @@ img {
 .row_margin {
     margin-top: 10px;
 }
+
+alert-error {
+    color: red;
+}

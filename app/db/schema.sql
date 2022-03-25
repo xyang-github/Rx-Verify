@@ -55,5 +55,6 @@ CREATE TABLE "user" (
 	"user_id"	INTEGER NOT NULL,
 	"email"	TEXT NOT NULL,
 	"password"	TEXT NOT NULL,
-	PRIMARY KEY("user_id" AUTOINCREMENT)
+	"confirmed"	INTEGER NOT NULL DEFAULT 0,
+	PRIMARY KEY("user_id")
 );

@@ -15,6 +15,15 @@ class DevelopmentConfig(Config):
     """Additional configuration setting for app development"""
     DEBUG = True
 
+    # Mail config
+    LOGIN_MAIL_SENDER = 'LOGIN ADMIN <0c6e22c1b5-f075dd@inbox.mailtrap.io>'
+    MAIL_SERVER = 'smtp.mailtrap.io'
+    MAIL_PORT = 2525
+    MAIL_USERNAME = 'b4cdd9e31c1cfc'
+    MAIL_PASSWORD = '1b16b9aeffcc0e'
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
+
 
 class TestingConfig(Config):
     """Additional configuration setting for app testing"""
