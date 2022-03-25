@@ -11,10 +11,10 @@ def query_select(query, key):
     return result
 
 
-def query_change(query):
+def query_change(query, key):
     con = sqlite3.connect(path)
     cur = con.cursor()
-    cur.execute(query)
+    print(key)
+    cur.execute(query, key)
     con.commit()
     con.close()
-    return result
