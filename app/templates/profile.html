@@ -4,6 +4,7 @@
 <h1>Profile</h1>
 
 <form method="POST">
+{{ form.csrf_token }}
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-5">
@@ -33,7 +34,10 @@
             {{ form.weight(class="form-control", id="weight") }}
         </div>
 
-        <div class="col-sm-5"></div>
+        <div class="col-sm-5">
+            <label for="allergies" class="form-label">{{ form.allergies.label }}</label>
+            {{ form.allergies(class="form-control", id="allergies") }}
+        </div>
     </div>
 
     <div class="row row_margin">
@@ -54,6 +58,7 @@
         document.getElementById("middle_initial").readOnly = true;
         document.getElementById("date_of_birth").readOnly = true;
         document.getElementById("weight").readOnly = true;
+        document.getElementById("allergies").readOnly = true;
     }
 </script>
 

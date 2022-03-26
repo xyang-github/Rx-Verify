@@ -1,6 +1,5 @@
 
 DROP TABLE IF EXISTS active_med;
-DROP TABLE IF EXISTS allergy;
 DROP TABLE IF EXISTS hist_med;
 DROP TABLE IF EXISTS patient;
 DROP TABLE IF EXISTS patient_allergy;
@@ -18,11 +17,6 @@ CREATE TABLE "active_med" (
 	PRIMARY KEY("active_med_id" AUTOINCREMENT)
 );
 
-CREATE TABLE "allergy" (
-	"allergy_id"	INTEGER NOT NULL,
-	"allergy_name"	TEXT NOT NULL,
-	PRIMARY KEY("allergy_id" AUTOINCREMENT)
-);
 
 CREATE TABLE "hist_med" (
 	"hist_med_id"	INTEGER NOT NULL,
@@ -48,7 +42,7 @@ CREATE TABLE "patient" (
 
 CREATE TABLE "patient_allergy" (
 	"patient_id"	INTEGER NOT NULL,
-	"allergy_id"	INTEGER NOT NULL
+	"allergy"	TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE "user" (

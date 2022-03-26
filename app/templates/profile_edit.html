@@ -34,7 +34,11 @@
             {{ form.weight(class="form-control", id="weight") }}
         </div>
 
-        <div class="col-sm-5"></div>
+        <div class="col-sm-5">
+            <label for="allergies" class="form-label">{{ form.allergies.label }}</label>
+            {{ form.allergies(class="form-control", id="allergies") }}
+        </div>
+
     </div>
 
     <div class="row row_margin">

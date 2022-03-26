@@ -60,24 +60,14 @@ def register():
                 query="SELECT patient_id FROM patient WHERE user_id = (?)",
                 key=user_id)[0][0]
 
+            # Add allergy to patient_allergy table
             allergies = request.form['allergies']
             if allergies != "":
-                allergies = allergies.split(" ")
+                allergies = allergies.split(",")
                 for allergy in allergies:
-                    # Add allergy to allergy table
                     query_change(
-                        query="INSERT INTO allergy (allergy_name) VALUES (?)",
-                        key=(allergy,)
-                    )
-                    # Select allergy id that was just inserted
-                    allergy_id = query_select(
-                        query="SELECT allergy_id FROM allergy ORDER BY allergy_id DESC LIMIT (?)",
-                        key=1
-                    )[0][0]
-                    # Add both patient and allergy id to linking table
-                    query_change(
-                        query="INSERT INTO patient_allergy (patient_id, allergy_id) VALUES (?, ?)",
-                        key=[patient_id, allergy_id]
+                        query="INSERT OR IGNORE INTO  patient_allergy (patient_id, allergy) VALUES (?, ?)",
+                        key=[patient_id, allergy]
                     )
 
             # Add user and patient ids to the session
@@ -90,7 +80,7 @@ def register():
                        "Confirm Your Account",
                        "confirm_registration.html",
                        token=token)
-            flash("A confirmation email has been sent.")
+            flash("A confirmation email has been sent")
         return redirect(url_for("auth.register"))
 
     return render_template("register.html", form=registration_form)

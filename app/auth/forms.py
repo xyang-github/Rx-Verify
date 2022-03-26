@@ -12,9 +12,9 @@ class RegistrationForm(FlaskForm):
     dob = DateField("Date of Birth", format="%Y-%m-%d",
                     validators=[DataRequired(message="Date of birth cannot be blank")])
     weight = IntegerField("Weight (pounds)", validators=[Optional(), NumberRange(min=0)])
-    allergies = StringField("Medication Allergies (if more than one, separate by space)", validators=[Regexp(
-        regex="^[A-Za-z ]+$",
-        message="Allergies can only contain letters and spaces"), Optional()])
+    allergies = StringField("Medication Allergies (if more than one, separate by comma)", validators=[Regexp(
+        regex="^[A-Za-z, ]+$",
+        message="Allergies can only contain letters, commas, and spaces"), Optional()])
 
     regex = "^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z].*[a-z]).{8,}$"
     message = "Password must have at least 8 characters and include: 1 uppercase letter, 1 lowercase letter, 1 digit, "\
