@@ -4,7 +4,6 @@ from flask import current_app
 from flask_login import UserMixin
 
 
-
 class User(UserMixin):
     def __init__(self, id, email, password_hash, confirmed):
         self.id = id
