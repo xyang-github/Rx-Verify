@@ -50,9 +50,18 @@ def test_allergy_field(test_client):
     WHEN trying to register with allergies not meeting regex requirements
     THEN check that an error message is displayed
     """
-    data = {"allergies": "penicillin, lisinopril, atorvastatin"}
+
+    data = {"email": "123@yahoo.com",
+            "fname": "John",
+            "lname": "Doe",
+            "dob": "1989-02-28",
+            "password": "Starfish110!",
+            "password2": "Starfish110!",
+            "allergies": "penicillin, lisinopril, atorvastatin, 1234"}
+
     response = test_client.post('/register', data=data, follow_redirects=True)
-    assert b'Allergies can only contain letters and spaces' in response.data
+    print(response.data)
+    assert b'Allergies can only contain letters, commas, and spaces' in response.data
 
 
 def test_allergy_table():
