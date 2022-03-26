@@ -2,7 +2,8 @@ from flask import render_template,redirect, request, url_for, flash
 from flask_mail import Mail
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length, Email
+from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
+from wtforms import ValidationError
 from flask_login import LoginManager, login_user, logout_user, login_required
 from . import main
 
