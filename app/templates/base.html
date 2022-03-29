@@ -13,14 +13,14 @@
             <li class="active"><a href="{{ url_for("main.index") }}">Main</a></li>
             <li><a href="">Drug Interactions</a></li>
 
-{#            {% if current_user.is_authenticated  %}#}
+            {% if current_user.is_authenticated  %}
                 <li><a href="">Medications</a></li>
                 <li><a href="">Report</a></li>
                 <li><a href="">Logout</a></li>
-{#            {% else %}#}
-                <li><a href="">Login</a></li>
+            {% else %}
+                <li><a href="{{ url_for("auth.login")}}">Login</a></li>
                 <li><a href="{{ url_for("auth.register")}}">Register</a></li>
-{#            {% endif %}#}
+            {% endif %}
         </ul>
     </div>
 </div>

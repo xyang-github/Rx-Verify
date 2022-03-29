@@ -5,6 +5,7 @@ import email_validator
 
 
 class RegistrationForm(FlaskForm):
+    """Define registration form"""
     email = StringField("Email", validators=[DataRequired(message="Email cannot be blank"), Email(), Length(1, 50)])
     fname = StringField("First Name", validators=[DataRequired(message="First name cannot be blank")])
     lname = StringField("Last Name", validators=[DataRequired(message="Last name cannot be blank")])
@@ -24,3 +25,10 @@ class RegistrationForm(FlaskForm):
                                                      EqualTo("password2", message="Passwords must match.")])
     password2 = PasswordField("Confirm password", validators=[DataRequired()])
     submit = SubmitField("Submit")
+
+
+class LoginForm(FlaskForm):
+    """Define login form"""
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Login')

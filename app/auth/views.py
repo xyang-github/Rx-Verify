@@ -1,14 +1,44 @@
 from flask import render_template, redirect, url_for, flash, request, session
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, login_user
 from . import auth
 from .email import send_email
 from .forms import *
-from .security import Security
+from .security import Security, User
 from ..db.database_queries import query_select, query_change
 from datetime import datetime
+from .. import login_manager
 
 
 # Adapted from Flask Web Development: Developing Web Applications with Python 2nd Edition,  978-1491991732
+@auth.route('/login', methods=["GET", "POST"])
+def login():
+    """Login user if they are registered"""
+    login_form = LoginForm()
+
+    if login_form.validate_on_submit():
+        email = login_form.email.data.lower()
+        password = login_form.password.data
+
+        # Retrieve user object to verify if email and password are correct
+        registered_user = query_select(
+            query="SELECT * FROM user WHERE email = (?)",
+            key=email
+        )
+
+        if registered_user:
+            user = load_user(registered_user[0][0])
+            if user.email == email and Security().verify_password(user.password_hash, password):
+                login_user(user)
+                session['user_id'] = user.get_id()
+                return redirect(url_for('profile.profile_main'))
+            else:
+                flash('Invalid password')
+        else:
+            flash('Invalid email')
+
+    return render_template('login.html', form=login_form)
+
+
 @auth.route('/register', methods=["GET", "POST"])
 def register():
     registration_form = RegistrationForm()
@@ -103,3 +133,18 @@ def confirm_registration(token):
         flash('The confirmation link is invalid or has expired.')
 
     return redirect(url_for('main.index'))
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Reload the user object from the user ID stored in the session"""
+
+    result = query_select(
+        query="SELECT * FROM user WHERE user_id = (?)",
+        key=user_id
+    )
+
+    if result is None:
+        return False
+    else:
+        return User(int(result[0][0]), result[0][1], result[0][2], result[0][3])

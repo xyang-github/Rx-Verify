@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+
+<h1>Login</h1>
+
+<form method="POST">
+    {{ form.csrf_token }}
+    <div class="mb-3">
+        <label for="email" class="form-label">{{ form.email.label }}</label>
+        {{ form.email(class="form-control", id="email")}}
+    </div>
+
+    <div class="mb-3">
+        <label for="password" class="form-label">{{ form.password.label }}</label>
+        {{ form.password(class="form-control", id="password") }}
+    </div>
+
+    {{ form.submit(class="btn btn-primary") }}
+
+    <div class="mb-3">
+        <p><a href="#">Forgot password?</a></p>
+    </div>
+</form>
+{% endblock %}

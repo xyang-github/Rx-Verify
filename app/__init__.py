@@ -2,11 +2,14 @@ from flask import Flask
 from flask_bootstrap import Bootstrap
 from config import *
 from flask_mail import Mail
+from flask_login import LoginManager
 
 
 # Start initializing extensions here
 bootstrap = Bootstrap()
 mail = Mail()
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
 
 
 def create_app(config_name):
@@ -17,6 +20,7 @@ def create_app(config_name):
     # Finish initializing extensions here
     bootstrap.init_app(app)
     mail.init_app(app)
+    login_manager.init_app(app)
 
     # Register blueprints to app
     from .auth import auth as auth_blueprint
