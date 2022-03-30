@@ -1,25 +1,28 @@
+from flask_login import login_required
+
 from . import profile
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, session
 from .forms import *
 from ..db.database_queries import query_select, query_change
 from datetime import datetime
 
 
 @profile.route('/profile', methods=["GET", "POST"])
+@login_required
 def profile_main():
     """Display profile page"""
 
     profile_form = PatientProfileForm()
 
     # Retrieve patient information using patient_id
-    patient_id = 1  # will retrieve from the session once login feature has been completed
+    patient_id = session['patient_id']
     query = "SELECT * from patient WHERE patient_id = (?)"
     patient = query_select(query, patient_id)
 
     # Retrieve allergies from patient_allergy table and convert from list of tuples to a string to display
     allergies = query_select(
         query="SELECT allergy FROM patient_allergy WHERE patient_id = (?)",
-        key=1
+        key=patient_id
     )
     allergies_list = []
     for allergy in allergies:
@@ -47,7 +50,7 @@ def edit():
 
     profile_form_edit = PatientProfileForm()
 
-    patient_id = 1  # will retrieve from the session once login feature has been completed
+    patient_id = session['user_id']  # will retrieve from the session once login feature has been completed
     query = "SELECT * from patient WHERE patient_id = (?)"
     patient = query_select(query, patient_id)
 
