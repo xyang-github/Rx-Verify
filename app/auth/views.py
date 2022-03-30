@@ -145,7 +145,7 @@ def logout():
     """Log user out of the session"""
     logout_user()
     flash('You have been logged out')
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('main.index'))
 
 
 @auth.route('/forgot_password', methods=["GET", "POST"])

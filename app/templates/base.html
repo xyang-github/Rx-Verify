@@ -10,12 +10,16 @@
 <div class="navbar navbar-default">
     <div class="container-fluid">
         <ul class="nav navbar-nav">
-            <li class="active"><a href="{{ url_for("main.index") }}">Main</a></li>
+            {% if current_user.is_authenticated %}
+                <li class="active"><a href="{{ url_for("profile.profile_main") }}">Main</a></li>
+            {% else %}
+                <li class="active"><a href="{{ url_for("main.index") }}">Main</a></li>
+            {% endif %}
+
             <li><a href="">Drug Interactions</a></li>
 
             {% if current_user.is_authenticated  %}
                 <li><a href="">Medications</a></li>
-                <li><a href="">Report</a></li>
                 <li><a href="{{ url_for("auth.logout")}}">Logout</a></li>
             {% else %}
                 <li><a href="{{ url_for("auth.login")}}">Login</a></li>
