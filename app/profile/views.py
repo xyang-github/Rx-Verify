@@ -18,6 +18,7 @@ def profile_main():
     patient_id = session['patient_id']
     query = "SELECT * from patient WHERE patient_id = (?)"
     patient = query_select(query, patient_id)
+    print(patient)
 
     # Retrieve allergies from patient_allergy table and convert from list of tuples to a string to display
     allergies = query_select(
@@ -50,7 +51,7 @@ def edit():
 
     profile_form_edit = PatientProfileForm()
 
-    patient_id = session['user_id']  # will retrieve from the session once login feature has been completed
+    patient_id = session['patient_id']  # will retrieve from the session once login feature has been completed
     query = "SELECT * from patient WHERE patient_id = (?)"
     patient = query_select(query, patient_id)
 
