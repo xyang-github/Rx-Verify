@@ -33,7 +33,7 @@ def login():
                 next = request.args.get('next')
 
                 if next is None or not next.startswith('/'):
-                    next = url_for('main.profile_main')
+                    next = url_for('profile.profile_main')
                 return redirect(next)
             else:
                 flash('Invalid password')
@@ -112,7 +112,7 @@ def register():
             token = Security().generate_configuration_token(user_id)
             send_email(email,
                        "Confirm Your Account",
-                       "confirm_registration.html",
+                       "email/confirm_registration.html",
                        token=token)
             flash("A confirmation email has been sent")
         return redirect(url_for("auth.register"))
@@ -146,6 +146,73 @@ def logout():
     logout_user()
     flash('You have been logged out')
     return redirect(url_for('auth.login'))
+
+
+@auth.route('/forgot_password', methods=["GET", "POST"])
+def forgot_password():
+    """Allow users to receive an email to verify password reset request"""
+    forgot_password_form = ForgotPasswordForm()
+
+    if forgot_password_form.validate_on_submit():
+        email = forgot_password_form.email.data.lower()
+
+        # Retrieve user object to determine if user is registered
+        registered_user = query_select(
+            query="SELECT * FROM user WHERE email = (?)",
+            key=email
+        )
+
+        if not registered_user:
+            flash('Email is not registered')
+        else:
+            # Generate token to to reset password
+            token = Security().generate_configuration_token(registered_user[0][0])
+            send_email(registered_user[0][1],
+                       "Reset Password",
+                       "email/forgot_password.html",
+                       email=email,
+                       token=token)
+            flash("An email was sent to reset your password.")
+            return redirect(url_for('auth.forgot_password'))
+
+    return render_template('forgot_password.html', form=forgot_password_form)
+
+
+@auth.route('/confirm_reset_password/<email>/<token>', methods=["GET", "POST"])
+def confirm_reset_password(email, token):
+    """Confirm the email token to reset password"""
+    registered_user = query_select(
+        query="SELECT * FROM user WHERE email = (?)",
+        key=email
+    )
+
+    if Security().confirm(registered_user[0][0], token):
+        return redirect(url_for('auth.reset_password', email=email))
+    else:
+        flash('The link is invalid or has expired.')
+    return redirect(url_for('auth.login'))
+
+
+@auth.route('/reset_password/<email>', methods=["GET", "POST"])
+def reset_password(email):
+    """Allow user to type a new password"""
+    reset_password_form = ResetPasswordForm()
+
+    if reset_password_form.validate_on_submit():
+        registered_user = query_select(
+            query="SELECT * FROM user WHERE email = (?)",
+            key=email
+        )
+        password_hash = Security().generate_password_hash(reset_password_form.password.data)
+
+        query_change(
+            query="UPDATE user SET password = (?) WHERE user_id = (?)",
+            key=[password_hash, registered_user[0][0]]
+        )
+        flash("Password successfully changed. Please login with the new password.")
+        return redirect(url_for('auth.login'))
+
+    return render_template('reset_password.html', form=reset_password_form)
 
 
 @login_manager.user_loader

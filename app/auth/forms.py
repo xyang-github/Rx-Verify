@@ -32,3 +32,21 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+
+
+class ForgotPasswordForm(FlaskForm):
+    """Define forgot password form"""
+
+    email = StringField("Email", validators=[DataRequired(), Email(), Length(1, 50)])
+    submit = SubmitField("Submit")
+
+
+class ResetPasswordForm(FlaskForm):
+    """Define form fields for the 'reset password' page"""
+    regex = "^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z].*[a-z]).{8,}$"
+    message = "Password must have at least 8 characters and include: 1 uppercase letter, 1 lowercase letter, 1 digit, " \
+              "1 special character"
+    password = PasswordField("Password", validators=[DataRequired(), Regexp(regex, 0, message),
+                                                     EqualTo("password2", message="Passwords must match.")])
+    password2 = PasswordField("Confirm password", validators=[DataRequired()])
+    submit = SubmitField("Submit")
