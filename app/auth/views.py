@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, flash, request, session
-from flask_login import login_required, current_user, login_user
+from flask_login import login_required, current_user, login_user, logout_user
 from . import auth
 from .email import send_email
 from .forms import *
@@ -30,7 +30,11 @@ def login():
             if user.email == email and Security().verify_password(user.password_hash, password):
                 login_user(user)
                 session['user_id'] = user.get_id()
-                return redirect(url_for('profile.profile_main'))
+                next = request.args.get('next')
+
+                if next is None or not next.startswith('/'):
+                    next = url_for('main.profile_main')
+                return redirect(next)
             else:
                 flash('Invalid password')
         else:
@@ -116,23 +120,32 @@ def register():
     return render_template("register.html", form=registration_form)
 
 
-@auth.route('/confirm_registration/<token>')
+@auth.route('/confirm/<token>')
 @login_required
 def confirm_registration(token):
     """Confirm token in confirmation email"""
-    if current_user.confirmed:
-        return redirect(url_for('profile.profile_main'))
 
     if Security().confirm(current_user.id, token):
         query_change(
             query="UPDATE user SET confirmed = (?) WHERE user_id = (?)",
-            key=[1, session["user_id"]]
+            key=[1, current_user.id]
         )
         flash('You have confirmed your account.')
+        return redirect(url_for('profile.profile_main'))
     else:
         flash('The confirmation link is invalid or has expired.')
+        return redirect(url_for('main.index'))
 
-    return redirect(url_for('main.index'))
+    # return redirect(url_for('profile.profile_main'))
+
+
+@auth.route('/logout')
+@login_required
+def logout():
+    """Log user out of the session"""
+    logout_user()
+    flash('You have been logged out')
+    return redirect(url_for('auth.login'))
 
 
 @login_manager.user_loader
@@ -147,4 +160,4 @@ def load_user(user_id):
     if result is None:
         return False
     else:
-        return User(int(result[0][0]), result[0][1], result[0][2], result[0][3])
+        return User(int(result[0][0]), result[0][1], result[0][2], int(result[0][3]))

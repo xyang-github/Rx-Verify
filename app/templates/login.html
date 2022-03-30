@@ -11,14 +11,16 @@
         {{ form.email(class="form-control", id="email")}}
     </div>
 
-    <div class="mb-3">
+    <div class="mb-3 row_margin">
         <label for="password" class="form-label">{{ form.password.label }}</label>
         {{ form.password(class="form-control", id="password") }}
     </div>
 
-    {{ form.submit(class="btn btn-primary") }}
+    <div class="mb-3 row_margin">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
 
-    <div class="mb-3">
+    <div class="mb-3 row_margin">
         <p><a href="#">Forgot password?</a></p>
     </div>
 </form>

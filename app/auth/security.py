@@ -9,6 +9,7 @@ class User(UserMixin):
         self.id = id
         self.email = email
         self.password_hash = password_hash
+        self.confirmed = confirmed
 
 
 class Security:
