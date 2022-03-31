@@ -21,6 +21,7 @@ class Config:
     def init_app(app):
         pass
 
+
 class DevelopmentConfig(Config):
     """Additional configuration setting for app development"""
     DEBUG = True
@@ -30,6 +31,7 @@ class TestingConfig(Config):
     """Additional configuration setting for app testing"""
     TESTING = True
     WTF_CSRF_ENABLED = False
+    LOGIN_DISABLED = True
 
 
 config = {
