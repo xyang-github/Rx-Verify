@@ -128,3 +128,9 @@ def allergies_db_to_form(patient_id):
         allergies_list.append(allergy[0])
     allergies_string = ",".join(allergies_list)
     return allergies_string
+
+
+@profile.route('/medmain', methods=["GET", "POST"])
+def medmain():
+    form = PatientProfileForm()
+    return render_template("med.html", form=form)

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+
+<!-- Header -->
+  <div style = "text-align: center;font-weight:bold;text-decoration:underline;font-family: Arial">
+      <h2>Medications</h2>
+  </div>
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs nav-justified mb-3" role="tablist">
+    <li role="presentation" class="active"><a href="#active" class="btn btn-primary btn-block" data-toggle="tab">Active</a></li>
+    <li role="presentation"><a href="#historical" class="btn btn-primary btn-block" data-toggle="tab">Historical</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div id="active" class="tab-pane fade">
+        <div style = "text-align: center;margin-top:10em;" class = "button1">
+            <p>No Medications Listed</p>
+            <button type="button" class="btn btn-primary btn-floating" id = "button1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+            </button>
+                <p><em>Click here to add</em></p>
+        </div>
+    </div>
+    <div id="historical" class="tab-pane fade">
+        <div style = "text-align: center;margin-top:10em;" class = "button2">
+            <p>No Medications Listed</p>
+            <button type="button" class="btn btn-primary btn-floating" id = "button2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+            </button>
+                <p><em>Click here to add</em></p>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
