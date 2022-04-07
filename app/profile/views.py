@@ -131,6 +131,22 @@ def allergies_db_to_form(patient_id):
 
 
 @profile.route('/medmain', methods=["GET", "POST"])
+@login_required
 def medmain():
+    # Display the medication page
+
+    # Get the patient_id from flask session
+    patient_id = session['patient_id']
+
+    # Use patient_id to get the patient's list of active medications
+    list_of_active_medications = query_select(
+        query="SELECT * from active_med INNER JOIN  patient ON active_med.patient_id = patient.patient_id WHERE "
+              "active_med.patient_id = (?)",
+        key=patient_id
+    )
+
+    # Use patient_id to get the patient's list of historical medications
+    # Enter code here
+
     form = PatientProfileForm()
-    return render_template("med.html", form=form)
+    return render_template("med.html", form=form, active_meds=list_of_active_medications)
