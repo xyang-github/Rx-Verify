@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
+{% block head %}
+{{ super() }}
+    <link href='https://clinicaltables.nlm.nih.gov/autocomplete-lhc-versions/17.0.2/autocomplete-lhc.min.css' rel="stylesheet">
+{% endblock %}
+
 {% block page_content %}
 <h1>Add New Medication</h1>
 
@@ -9,12 +14,12 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-5">
-            <label for="medication name" class="form-label">{{ form.med_name.label }}</label>
-            {{ form.med_name(class="form-control", id="med_name") }}
+            <label for="medication name" class="form-label">Medication Name</label>
+            <input type="text" class="form-control" id="rxterms">
         </div>
         <div class="col-md-5">
-            <label for="medication dose" class="form-label">{{ form.med_dose.label }}</label>
-            {{ form.med_dose(class="form-control", id="med_dose") }}
+            <label for="medication dose" class="form-label">Medication Strength</label>
+            <input type="text" class="form-control" id="drug_strengths">
         </div>
         <div class="col-md-2"></div>
     </div>
@@ -45,4 +50,24 @@
     </div>
 </div>
 </form>
+
+
+<!-- JQuery and JS needed for autocomplete-lhc feature;
+source: https://clinicaltables.nlm.nih.gov/apidoc/rxterms/v3/doc.html -->
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
+<script src='https://clinicaltables.nlm.nih.gov/autocomplete-lhc-versions/17.0.2/autocomplete-lhc.min.js'></script>
+<script>
+    new Def.Autocompleter.Prefetch('drug_strengths', []);
+    new Def.Autocompleter.Search('rxterms',
+        'https://clinicaltables.nlm.nih.gov/api/rxterms/v3/search?ef=STRENGTHS_AND_FORMS');
+    Def.Autocompleter.Event.observeListSelections('rxterms', function() {
+      var drugField = $('#rxterms')[0];
+      var autocomp = drugField.autocomp;
+      var strengths =
+        autocomp.getSelectedItemData()[0].data['STRENGTHS_AND_FORMS'];
+      if (strengths)
+        $('#drug_strengths')[0].autocomp.setListAndField(strengths, '');
+    })
+</script>
+
 {% endblock %}

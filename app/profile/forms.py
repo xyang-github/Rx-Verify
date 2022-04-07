@@ -21,8 +21,8 @@ class PatientProfileForm(FlaskForm):
 
 class MedicationAddForm(FlaskForm):
     """The form used for adding new medications"""
-    med_name = StringField("Medication Name", validators=[DataRequired()])
-    med_dose = StringField("Medication Dose", validators=[DataRequired()])
+    # med_name = StringField("Medication Name", validators=[DataRequired()])
+    # med_dose = StringField("Medication Dose", validators=[DataRequired()])
     med_directions = StringField("Directions", validators=[DataRequired()])
     start_date = DateField("Date Started")
     comment = TextAreaField("Comments")
