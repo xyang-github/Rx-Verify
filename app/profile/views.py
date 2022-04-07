@@ -150,3 +150,14 @@ def medmain():
 
     form = PatientProfileForm()
     return render_template("med.html", form=form, active_meds=list_of_active_medications)
+
+
+@profile.route('/med_add', methods=["GET", "POST"])
+@login_required
+def medication_add():
+    """Displays the add medication page"""
+
+    # Instantiate form object
+    medication_form = MedicationAddForm()
+
+    return render_template("med_add.html", form=medication_form)

@@ -5,6 +5,7 @@ from wtforms.validators import *
 
 # Regexp source: Regular Expressions Cookbook, isbn 9781449319434
 class PatientProfileForm(FlaskForm):
+    """The form used for displaying and editing patient information"""
     fname = StringField("First Name", validators=[DataRequired()])
     lname = StringField("Last Name", validators=[DataRequired()])
     minitial = StringField("Middle Initial", validators=[Optional()])
@@ -16,3 +17,14 @@ class PatientProfileForm(FlaskForm):
     edit = SubmitField("Edit Profile")
     update = SubmitField("Update Profile")
     cancel = SubmitField("Cancel")
+
+
+class MedicationAddForm(FlaskForm):
+    """The form used for adding new medications"""
+    med_name = StringField("Medication Name", validators=[DataRequired()])
+    med_dose = StringField("Medication Dose", validators=[DataRequired()])
+    med_directions = StringField("Directions", validators=[DataRequired()])
+    start_date = DateField("Date Started")
+    comment = TextAreaField("Comments")
+    add_btn = SubmitField("Add")
+    cancel_btn = SubmitField("Cancel")
