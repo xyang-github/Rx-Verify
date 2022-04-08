@@ -31,8 +31,7 @@
     }
 
     table {
-        width: 90%;
-        margin: 10px;
+        width: 100%;
         font-size: 14px;
         border-collapse: collapse;
         border-spacing: 10px;
@@ -89,19 +88,22 @@
             <p>No Active Medications On File</p>
         </div>
         <div class="text-center">
-            <a href="{{ url_for("profile.medication_add") }}">
+            <a href="{{ url_for("profile.active_medication_add") }}">
                 <button type="button" class="btn btn-info">Add Medication</button>
             </a>
         </div>
     {% else %}
         <!-- Show medication table -->
         {{table}}
-        <a href="{{ url_for("profile.active_medication_add") }}">
-                <button type="button" class="btn btn-info">Add Medication</button>
-        </a>
-
     {% endif %}
+
+        <div class="text-right" style="margin-top: 10px;">
+            <a href="{{ url_for("profile.active_medication_add") }}">
+                <button type="button" class="btn btn-info">Add Medication</button>
+            </a>
+        </div>
     </div>
+
 
 {#<div id="historical" class="tab-pane fade">#}
 

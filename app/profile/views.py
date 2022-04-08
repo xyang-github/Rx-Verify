@@ -241,14 +241,102 @@ def active_medication_add():
             else:
                 flash("The medication name entered does not exist.")
 
-    return render_template("med_add.html", form=medication_form)
+    return render_template("active_med_add.html", form=medication_form)
 
 
 @profile.route('/med_edit/<int:active_med_id>', methods=["GET", "POST"])
 @login_required
 def active_medication_edit(active_med_id):
-    return render_template("main.index.html")
+    """Display the page to edit an active medication"""
 
+    # Instantiate medication edit form into its own variable
+    medication_edit_form = MedicationEditForm()
+
+    # Store active_med_id into its own variable, which will be used in a query
+    active_med_id = active_med_id
+
+    # If the cancel button is clicked, will return to medmain page
+    if medication_edit_form.cancel_btn.data:
+        return redirect(url_for("profile.medmain"))
+
+    if medication_edit_form.update_btn.data and medication_edit_form.validate():
+        # Collect updated data after user clicks the Update button
+        med_name = request.form['rxterms']
+        med_dose = request.form['drug_strengths']
+        med_directions = request.form['med_directions']
+        start_date = request.form['start_date']
+        comment = request.form['comment']
+
+        # Construct url needed to send a request to RxTerms API
+        url_base = "https://clinicaltables.nlm.nih.gov/api/rxterms/v3/search?terms="
+        url_final = url_base + med_name + "&ef=STRENGTHS_AND_FORMS,RXCUIS"
+
+        # Will display a warning if medication name field is blank
+        if med_name == "":
+            flash("Medication name cannot be blank")
+
+        # Will display a warning if medication strength field is blank
+        elif med_dose == "":
+            flash("Medication strength cannot be blank")
+
+        else:
+
+            # Send a request to RxTerms API
+            response = requests.get(url_final).json()
+
+            # A value of 1 means that one exact match for the name was found
+            if response[0] >= 1:
+
+                # Create a list of doses associated with the drug name, stripped of leading white space
+                list_of_doses = []
+                for dose in response[2]['STRENGTHS_AND_FORMS'][0]:
+                    list_of_doses.append(dose.strip())
+
+                # Determine if the dose entered in the form matches a dose in RxTerms; if there is a match, will
+                # get the rxcui which will be later used in the API
+                try:
+                    dose_index = list_of_doses.index(med_dose)
+                    rxcui = response[2]['RXCUIS'][0][dose_index]
+
+                    # Add new medication entry to the database
+                    query_change(
+                        query="UPDATE active_med SET med_name = (?), med_dose = (?), med_directions = (?), "
+                              "med_start_date = (?), comment = (?), rxcui = (?) WHERE active_med_id = (?)",
+                        key=[med_name, med_dose, med_directions, start_date, comment, rxcui, active_med_id]
+                    )
+
+                    # Shows a message that medication has been updated, and redirects to medmain
+                    flash("Medication has been updated")
+                    return redirect(url_for("profile.medmain"))
+
+                except ValueError:
+                    flash("The medication strength entered does not exist.")
+
+            # A value of 0 means there is no match for the medication name
+            else:
+                flash("The medication name entered does not exist.")
+
+    # Retrieve the medication information using the active_med_id
+    result = query_select(
+        query="SELECT med_name, med_dose, med_directions, med_start_date, comment FROM active_med WHERE "
+              "active_med_id = (?)",
+        key=active_med_id
+    )
+
+    # Prefills the form with the medication information obtained from SQLite
+    medication_edit_form.med_directions.data = result[0][2]
+    start_date = result[0][3]
+
+    # Need to convert date from a string to a date object before inserting into the form, which is a DateField
+    if start_date == "":
+        medication_edit_form.start_date.data = ""
+    else:
+        medication_edit_form.start_date.data = datetime.strptime(result[0][3], '%Y-%m-%d').date()
+
+    medication_edit_form.comment.data = result[0][4]
+
+    return render_template("active_med_edit.html", form=medication_edit_form, med_name=result[0][0],
+                           med_dose=result[0][1])
 
 @profile.route('/med_edit/<int:active_med_id>', methods=["GET", "POST"])
 @login_required

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+    <link href='https://clinicaltables.nlm.nih.gov/autocomplete-lhc-versions/17.0.2/autocomplete-lhc.min.css' rel="stylesheet">
+{% endblock %}
+
+{% block page_content %}
+<h1>Edit Medication</h1>
+
+<form method="POST">
+{{ form.csrf_token }}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-5">
+            <label for="medication name" class="form-label">Medication Name</label>
+            <input type="text" class="form-control" id="rxterms" name="rxterms" value="{{ med_name }}">
+        </div>
+        <div class="col-md-5">
+            <label for="medication dose" class="form-label">Medication Strength</label>
+            <input type="text" class="form-control" id="drug_strengths" name="drug_strengths" value="{{ med_dose }}">
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="row row_margin">
+        <div class="col-md-5">
+             <label for="medication directions" class="form-label">{{ form.med_directions.label }}</label>
+            {{ form.med_directions(class="form-control", id="med_directions") }}
+        </div>
+        <div class="col-md-5">
+            <label for="start date" class="form-label">{{ form.start_date.label }}</label>
+            {{ form.start_date(class="form-control", id="start_date") }}
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="row row_margin">
+        <div class="col-md-10">
+            <label for="comment" class="form-label">{{ form.comment.label }}</label>
+            {{ form.comment(class="form-control", id="comment") }}
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="row row_margin">
+        <div class="col-md-2">
+            {{ form.update_btn(class="btn btn-info", id="update_btn") }}
+            {{ form.cancel_btn(class="btn btn-secondary") }}
+        </div>
+        <div class="col-md-10"></div>
+    </div>
+</div>
+</form>
+
+
+<!-- JQuery and JS needed for autocomplete-lhc feature;
+source: https://clinicaltables.nlm.nih.gov/apidoc/rxterms/v3/doc.html -->
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
+<script src='https://clinicaltables.nlm.nih.gov/autocomplete-lhc-versions/17.0.2/autocomplete-lhc.min.js'></script>
+<script>
+    new Def.Autocompleter.Prefetch('drug_strengths', []);
+    new Def.Autocompleter.Search('rxterms',
+        'https://clinicaltables.nlm.nih.gov/api/rxterms/v3/search?ef=STRENGTHS_AND_FORMS');
+    Def.Autocompleter.Event.observeListSelections('rxterms', function() {
+      var drugField = $('#rxterms')[0];
+      var autocomp = drugField.autocomp;
+      var strengths =
+        autocomp.getSelectedItemData()[0].data['STRENGTHS_AND_FORMS'];
+      if (strengths)
+        $('#drug_strengths')[0].autocomp.setListAndField(strengths, '');
+    });
+
+    <!-- Prevent the enter key from submitting a form by mistake -->
+    $(document).ready(function() {
+      $(window).keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          return false;
+        }
+      });
+    });
+</script>
+
+{% endblock %}
