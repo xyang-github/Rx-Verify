@@ -1,23 +1,87 @@
 {% extends "base.html" %}
 
-{% block page_content %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+    <style>
+    {#Source: https://stackoverflow.com/questions/49690006/font-awesome-5-why-is-css-content-not-showing#}
+    .edit_link::before {
+        font-family: "Font Awesome 5 Free";
+        font-weight: 400;
+        font-size: 16px;
+        content: "\f044";
+    }
 
+    .delete_link::before {
+        font-family: "Font Awesome 5 Free";
+        font-weight: 400;
+        font-size: 16px;
+        content: "\f2ed";
+    }
+
+    .medline_link::before {
+        font-family: "Font Awesome 5 Free";
+        font-weight: 800;
+        font-size: 16px;
+        content: "\f05a";
+    }
+
+    .tab-content {
+        overflow: auto;
+    }
+
+    table {
+        width: 90%;
+        margin: 10px;
+        font-size: 14px;
+        border-collapse: collapse;
+        border-spacing: 10px;
+        table-layout: fixed;
+    }
+
+    table tr {
+        height: 30px;
+        border-bottom: 1px solid gray;
+    }
+
+    table th {
+        width: 200px;
+    }
+
+    table th:nth-child(4) {
+        width: 110px;
+    }
+
+    table th:nth-child(n+6):nth-child(-n+8){
+        width: 20px;
+    }
+
+    table tr td:nth-child(5){
+          white-space:nowrap;
+          overflow:hidden;
+          text-overflow:ellipsis;
+    }
+    </style>
+
+{% endblock %}
+
+{% block page_content %}
 <!-- Header -->
 <h1>Medications</h1>
 
 <!-- Nav tabs -->
-<ul class="nav nav-tabs nav-justified mb-3" role="tablist">
-    <li role="presentation" class="active">
-        <a href="#active" class="btn btn-primary btn-block" data-toggle="tab">Active</a>
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a href="#active" data-toggle="tab">Active</a>
     </li>
     <li role="presentation">
-        <a href="#historical" class="btn btn-primary btn-block" data-toggle="tab">Historical</a>
+        <a href="#historical" data-toggle="tab">Historical</a>
     </li>
 </ul>
 
 <!-- Tab panes -->
 <div class="tab-content">
-  <div class="tab-pane show active" id="active" role="tabpanel" aria-labelledby="main-tab">
+  <div class="tab-pane fade in active" id="active">
 
     <!-- Use an if statement to show content based on the number of active medications -->
     {% if active_meds|length == 0 %}
@@ -32,32 +96,19 @@
     {% else %}
         <!-- Show medication table -->
         {{table}}
-        <a href="{{ url_for("profile.medication_add") }}">
+        <a href="{{ url_for("profile.active_medication_add") }}">
                 <button type="button" class="btn btn-info">Add Medication</button>
         </a>
 
     {% endif %}
-
-
-{#            <p>No Medications Listed</p>#}
- {#           <button type="button" class="btn btn-primary btn-floating" id = "button1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                </svg>
-            </button>
-                <p><em>Click here to add</em></p>#}{##}
-
     </div>
-    <div id="historical" class="tab-pane fade">
-        <div style = "text-align: center;margin-top:10em;" class = "button2">
-            <p>No Medications Listed</p>
-            <button type="button" class="btn btn-primary btn-floating" id = "button2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                </svg>
-            </button>
-                <p><em>Click here to add</em></p>
-        </div>
+
+{#<div id="historical" class="tab-pane fade">#}
+
+    <div class="tab-pane fade" id="historical">
+
+    <!-- Content goes here -->
+
     </div>
 </div>
 

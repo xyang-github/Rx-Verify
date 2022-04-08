@@ -6,7 +6,7 @@ from flask_login import login_required
 from . import profile
 from flask import render_template, request, redirect, url_for, flash, session
 from .forms import *
-from .table import Results
+from .table import Active_Medications_Table
 from ..db.database_queries import query_select, query_change, query_medication_results
 from datetime import datetime
 
@@ -145,7 +145,8 @@ def medmain():
     # Get the patient_id from flask session
     patient_id = session['patient_id']
 
-    # Use patient_id to get the patient's list of active medications
+    # Use patient_id to get the patient's list of active medications. Note that Flask-Table requires a list of
+    # dictionaries, which is why a new function 'query_medication_results' is used instead of 'query_select'
     list_of_active_medications = query_medication_results(
         query="SELECT active_med_id, active_med.patient_id, med_name, med_dose, med_directions, med_start_date, comment, "
               "rxcui from active_med INNER JOIN  patient ON active_med.patient_id = patient.patient_id WHERE "
@@ -156,7 +157,7 @@ def medmain():
     if len(list_of_active_medications) > 0:
 
         # Store the results in a table using Flask-Table module
-        table = Results(list_of_active_medications)
+        table = Active_Medications_Table(list_of_active_medications, classes="table")
         return render_template("med.html", form=form, active_meds=list_of_active_medications, table=table)
 
 
@@ -168,7 +169,7 @@ def medmain():
 
 @profile.route('/med_add', methods=["GET", "POST"])
 @login_required
-def medication_add():
+def active_medication_add():
     """Displays the add medication page"""
 
     # Instantiate form object
@@ -242,3 +243,21 @@ def medication_add():
 
     return render_template("med_add.html", form=medication_form)
 
+
+@profile.route('/med_edit/<int:active_med_id>', methods=["GET", "POST"])
+@login_required
+def active_medication_edit(active_med_id):
+    return render_template("main.index.html")
+
+
+@profile.route('/med_edit/<int:active_med_id>', methods=["GET", "POST"])
+@login_required
+def active_medication_delete(active_med_id):
+    return render_template("main.index.html")
+
+
+@profile.route('/medication_medline/<rxcui>', methods=["GET", "POST"])
+def medication_medline(rxcui):
+    """Will redirect to Medline, which contains information about the specific medication based on the rxcui value"""
+    base_url = "https://connect.medlineplus.gov/application?mainSearchCriteria.v.cs=2.16.840.1.113883.6.88&mainSearchCriteria.v.c="
+    return redirect(base_url + rxcui)
