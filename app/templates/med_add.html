@@ -68,6 +68,16 @@ source: https://clinicaltables.nlm.nih.gov/apidoc/rxterms/v3/doc.html -->
       if (strengths)
         $('#drug_strengths')[0].autocomp.setListAndField(strengths, '');
     });
+
+    <!-- Prevent the enter key from submitting a form by mistake -->
+    $(document).ready(function() {
+      $(window).keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          return false;
+        }
+      });
+    });
 </script>
 
 {% endblock %}

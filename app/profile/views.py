@@ -169,56 +169,64 @@ def medication_add():
 
     # Clicking the add button will validate form field entries
     if medication_form.add_btn.data:
+
+        # Store form fields into their own variables
+        med_directions = medication_form.med_directions.data
+        start_date = medication_form.start_date.data
+        comment = medication_form.comment.data
+
+        # Store the med name and dose in their own variables; the syntax is different, because the form fields do not
+        # use FlaskForm
         med_name = request.form['rxterms']
         med_dose = request.form['drug_strengths']
-    #
-    #
-    #     med_name = session['med_name']
-    #     med_dose = session['med_dose']
-    #     print(med_name, med_dose)
 
+        # Construct url needed to send a request to RxTerms API
+        url_base = "https://clinicaltables.nlm.nih.gov/api/rxterms/v3/search?terms="
+        url_final = url_base + med_name + "&ef=STRENGTHS_AND_FORMS,RXCUIS"
 
-        # Get the med_name and med_strength fields and store their values into variables
+        # Will display a warning if medication name field is blank
+        if med_name == "":
+            flash("Medication name cannot be blank")
 
-        #
-        # # Construct url needed to send a request to RxTerms API
-        # url_base = "https://clinicaltables.nlm.nih.gov/api/rxterms/v3/search?terms="
-        # url_final = url_base + med_name + "&ef=STRENGTHS_AND_FORMS,RXCUIS"
-        #
-        # if med_name == "":
-        #     flash("Medication name cannot be blank")
-        # elif med_dose == "":
-        #     flash("Medication strength cannot be blank")
-        # else:
-        #
-        #     # Send a request to RxTerms API
-        #     response = requests.get(url_final).json()
-        #     # A value of 1 means that one exact match for the name was found
-        #     if response[0] == 1:
-        #
-        #         # Create a list of doses associated with the drug name, stripped of leading white space
-        #         list_of_doses = []
-        #         for dose in response[2]['STRENGTHS_AND_FORMS'][0]:
-        #             list_of_doses.append(dose.strip())
-        #
-        #         # Determine if the dose entered in the form matches a dose in RxTerms; if there is a match, will
-        #         # get the rxcui
-        #         try:
-        #             dose_index = list_of_doses.index(med_dose)
-        #             rxcui = response[2]['RXCUIS'][0][dose_index]
-        #
-        #             # Send a query to the db
-        #             # redirect to mainmed
-        #         except ValueError:
-        #             flash("The medication strength entered does not exist.")
-        #
-        #     # A value > 1 means that the medication name was typed in instead of selected from the dropdown list
-        #     elif response[0] > 1:
-        #         flash("Please select a specific medication from the dropdown list.")
-        #
-        #     # A value of 0 means there is no match for the medication name
-        #     else:
-        #         flash("The medication name entered does not exist.")
+        # Will display a warning if medication strength field is blank
+        elif med_dose == "":
+            flash("Medication strength cannot be blank")
+
+        else:
+
+            # Send a request to RxTerms API
+            response = requests.get(url_final).json()
+
+            # A value of 1 means that one exact match for the name was found
+            if response[0] >= 1:
+
+                # Create a list of doses associated with the drug name, stripped of leading white space
+                list_of_doses = []
+                for dose in response[2]['STRENGTHS_AND_FORMS'][0]:
+                    list_of_doses.append(dose.strip())
+
+                # Determine if the dose entered in the form matches a dose in RxTerms; if there is a match, will
+                # get the rxcui
+                try:
+                    dose_index = list_of_doses.index(med_dose)
+                    rxcui = response[2]['RXCUIS'][0][dose_index]
+
+                    # Add new medication entry to the database
+                    query_change(
+                        query="INSERT INTO active_med (patient_id, med_name, med_dose, med_directions, med_start_date, "
+                              "comment, rxcui) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                        key=[session['patient_id'], med_name, med_dose, med_directions, start_date, comment, rxcui]
+                    )
+
+                    flash("Medication has been added")
+                    redirect(url_for("profile.mainmed"))
+
+                except ValueError:
+                    flash("The medication strength entered does not exist.")
+
+            # A value of 0 means there is no match for the medication name
+            else:
+                flash("The medication name entered does not exist.")
 
             # get rxcui
             # if no rxcui, then incorrect drug entered
