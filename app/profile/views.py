@@ -6,7 +6,8 @@ from flask_login import login_required
 from . import profile
 from flask import render_template, request, redirect, url_for, flash, session
 from .forms import *
-from ..db.database_queries import query_select, query_change
+from .table import Results
+from ..db.database_queries import query_select, query_change, query_medication_results
 from datetime import datetime
 
 
@@ -138,20 +139,30 @@ def allergies_db_to_form(patient_id):
 def medmain():
     # Display the medication page
 
+    # Will replace this later....
+    form = PatientProfileForm()
+
     # Get the patient_id from flask session
     patient_id = session['patient_id']
 
     # Use patient_id to get the patient's list of active medications
-    list_of_active_medications = query_select(
-        query="SELECT * from active_med INNER JOIN  patient ON active_med.patient_id = patient.patient_id WHERE "
+    list_of_active_medications = query_medication_results(
+        query="SELECT active_med_id, active_med.patient_id, med_name, med_dose, med_directions, med_start_date, comment, "
+              "rxcui from active_med INNER JOIN  patient ON active_med.patient_id = patient.patient_id WHERE "
               "active_med.patient_id = (?)",
-        key=patient_id
+        key=str(patient_id)
     )
+
+    if len(list_of_active_medications) > 0:
+
+        # Store the results in a table using Flask-Table module
+        table = Results(list_of_active_medications)
+        return render_template("med.html", form=form, active_meds=list_of_active_medications, table=table)
+
 
     # Use patient_id to get the patient's list of historical medications
     # Enter code here
 
-    form = PatientProfileForm()
     return render_template("med.html", form=form, active_meds=list_of_active_medications)
 
 
