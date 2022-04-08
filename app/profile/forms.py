@@ -19,6 +19,11 @@ class PatientProfileForm(FlaskForm):
     cancel = SubmitField("Cancel")
 
 
+class MedicationMainForm(FlaskForm):
+    """The form used for main medication page"""
+    add_btn = SubmitField("Add Medication")
+
+
 class MedicationAddForm(FlaskForm):
     """The form used for adding new medications"""
     med_directions = StringField("Directions", validators=[DataRequired()])

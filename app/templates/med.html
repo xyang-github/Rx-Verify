@@ -3,69 +3,10 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
-    <style>
-    {#Source: https://stackoverflow.com/questions/49690006/font-awesome-5-why-is-css-content-not-showing#}
-    .edit_link::before {
-        font-family: "Font Awesome 5 Free";
-        font-weight: 400;
-        font-size: 16px;
-        content: "\f044";
-    }
-
-    .delete_link::before {
-        font-family: "Font Awesome 5 Free";
-        font-weight: 400;
-        font-size: 16px;
-        content: "\f2ed";
-    }
-
-    .medline_link::before {
-        font-family: "Font Awesome 5 Free";
-        font-weight: 800;
-        font-size: 16px;
-        content: "\f05a";
-    }
-
-    .tab-content {
-        overflow: auto;
-    }
-
-    table {
-        width: 100%;
-        font-size: 14px;
-        border-collapse: collapse;
-        border-spacing: 10px;
-        table-layout: fixed;
-    }
-
-    table tr {
-        height: 30px;
-        border-bottom: 1px solid gray;
-    }
-
-    table th {
-        width: 200px;
-    }
-
-    table th:nth-child(4) {
-        width: 110px;
-    }
-
-    table th:nth-child(n+6):nth-child(-n+8){
-        width: 20px;
-    }
-
-    table tr td:nth-child(5){
-          white-space:nowrap;
-          overflow:hidden;
-          text-overflow:ellipsis;
-    }
-    </style>
-
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="med.css")}}">
 {% endblock %}
 
 {% block page_content %}
-<!-- Header -->
 <h1>Medications</h1>
 
 <!-- Nav tabs -->
@@ -89,23 +30,21 @@
         </div>
         <div class="text-center">
             <a href="{{ url_for("profile.active_medication_add") }}">
-                <button type="button" class="btn btn-info">Add Medication</button>
+                {{ form.add_btn(class="btn btn-info") }}
             </a>
         </div>
+
     {% else %}
         <!-- Show medication table -->
         {{table}}
 
-                <div class="text-right" style="margin-top: 10px;">
+        <div class="text-right" style="margin-top: 10px;">
             <a href="{{ url_for("profile.active_medication_add") }}">
-                <button type="button" class="btn btn-info">Add Medication</button>
+                {{ form.add_btn(class="btn btn-info") }}
             </a>
         </div>
     {% endif %}
     </div>
-
-
-{#<div id="historical" class="tab-pane fade">#}
 
     <div class="tab-pane fade" id="historical">
 

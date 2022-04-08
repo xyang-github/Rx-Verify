@@ -1,0 +1,59 @@
+/*Source: https://stackoverflow.com/questions/49690006/font-awesome-5-why-is-css-content-not-showing#}*/
+
+.tab-content {
+    overflow: auto;
+}
+
+/* Style for the edit, delete and medline links */
+.edit_link::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 400;
+    font-size: 16px;
+    content: "\f044";
+}
+
+.delete_link::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 400;
+    font-size: 16px;
+    content: "\f2ed";
+}
+
+.medline_link::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 800;
+    font-size: 16px;
+    content: "\f05a";
+}
+
+/* Style the medication table */
+table {
+    width: 100%;
+    font-size: 14px;
+    border-collapse: collapse;
+    border-spacing: 10px;
+    table-layout: fixed;
+}
+
+table tr {
+    height: 30px;
+    border-bottom: 1px solid gray;
+}
+
+table th {
+    width: 200px;
+}
+
+table th:nth-child(4) {
+    width: 110px;
+}
+
+table th:nth-child(n+6):nth-child(-n+8){
+    width: 20px;
+}
+
+table tr td:nth-child(5){
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+}

@@ -1,8 +1,5 @@
-import json
-
 import requests
 from flask_login import login_required
-
 from . import profile
 from flask import render_template, request, redirect, url_for, flash, session
 from .forms import *
@@ -139,8 +136,8 @@ def allergies_db_to_form(patient_id):
 def medmain():
     # Display the medication page
 
-    # Will replace this later....
-    form = PatientProfileForm()
+    # Instantiate the medication main form into a variable
+    main_medication_form = MedicationMainForm()
 
     # Get the patient_id from flask session
     patient_id = session['patient_id']
@@ -148,8 +145,8 @@ def medmain():
     # Use patient_id to get the patient's list of active medications. Note that Flask-Table requires a list of
     # dictionaries, which is why a new function 'query_medication_results' is used instead of 'query_select'
     list_of_active_medications = query_medication_results(
-        query="SELECT active_med_id, active_med.patient_id, med_name, med_dose, med_directions, med_start_date, comment, "
-              "rxcui from active_med INNER JOIN  patient ON active_med.patient_id = patient.patient_id WHERE "
+        query="SELECT active_med_id, active_med.patient_id, med_name, med_dose, med_directions, med_start_date, "
+              "comment, rxcui from active_med INNER JOIN  patient ON active_med.patient_id = patient.patient_id WHERE "
               "active_med.patient_id = (?)",
         key=str(patient_id)
     )
@@ -157,14 +154,13 @@ def medmain():
     if len(list_of_active_medications) > 0:
 
         # Store the results in a table using Flask-Table module
-        table = Active_Medications_Table(list_of_active_medications, classes="table")
-        return render_template("med.html", form=form, active_meds=list_of_active_medications, table=table)
+        table = Active_Medications_Table(list_of_active_medications)
+        return render_template("med.html", form=main_medication_form, active_meds=list_of_active_medications,
+                               table=table)
 
+    # Enter code for historical medications here
 
-    # Use patient_id to get the patient's list of historical medications
-    # Enter code here
-
-    return render_template("med.html", form=form, active_meds=list_of_active_medications)
+    return render_template("med.html", form=main_medication_form, active_meds=list_of_active_medications)
 
 
 @profile.route('/med_add', methods=["GET", "POST"])
@@ -192,10 +188,6 @@ def active_medication_add():
         med_name = request.form['rxterms']
         med_dose = request.form['drug_strengths']
 
-        # Construct url needed to send a request to RxTerms API
-        url_base = "https://clinicaltables.nlm.nih.gov/api/rxterms/v3/search?terms="
-        url_final = url_base + med_name + "&ef=STRENGTHS_AND_FORMS,RXCUIS"
-
         # Will display a warning if medication name field is blank
         if med_name == "":
             flash("Medication name cannot be blank")
@@ -205,6 +197,10 @@ def active_medication_add():
             flash("Medication strength cannot be blank")
 
         else:
+
+            # Construct url needed to send a request to RxTerms API
+            url_base = "https://clinicaltables.nlm.nih.gov/api/rxterms/v3/search?terms="
+            url_final = url_base + med_name + "&ef=STRENGTHS_AND_FORMS,RXCUIS"
 
             # Send a request to RxTerms API
             response = requests.get(url_final).json()
@@ -267,10 +263,6 @@ def active_medication_edit(active_med_id):
         start_date = request.form['start_date']
         comment = request.form['comment']
 
-        # Construct url needed to send a request to RxTerms API
-        url_base = "https://clinicaltables.nlm.nih.gov/api/rxterms/v3/search?terms="
-        url_final = url_base + med_name + "&ef=STRENGTHS_AND_FORMS,RXCUIS"
-
         # Will display a warning if medication name field is blank
         if med_name == "":
             flash("Medication name cannot be blank")
@@ -280,6 +272,10 @@ def active_medication_edit(active_med_id):
             flash("Medication strength cannot be blank")
 
         else:
+
+            # Construct url needed to send a request to RxTerms API
+            url_base = "https://clinicaltables.nlm.nih.gov/api/rxterms/v3/search?terms="
+            url_final = url_base + med_name + "&ef=STRENGTHS_AND_FORMS,RXCUIS"
 
             # Send a request to RxTerms API
             response = requests.get(url_final).json()
@@ -355,6 +351,7 @@ def active_medication_delete(active_med_id):
     med_name = result[0][0]
     med_dose = result[0][1]
 
+    # Will delete entry from the database if the confirm button is clicked
     if delete_medication_form.confirm_btn.data:
         query_change(
             query="DELETE FROM active_med WHERE active_med_id = (?)",
@@ -364,6 +361,7 @@ def active_medication_delete(active_med_id):
         flash("Medication entry has been deleted")
         return redirect(url_for("profile.medmain"))
 
+    # Clicking the cancel button will redirect to medmain
     if delete_medication_form.cancel_btn.data:
         return redirect(url_for("profile.medmain"))
 
@@ -373,5 +371,6 @@ def active_medication_delete(active_med_id):
 @profile.route('/medication_medline/<rxcui>', methods=["GET", "POST"])
 def medication_medline(rxcui):
     """Will redirect to Medline, which contains information about the specific medication based on the rxcui value"""
+
     base_url = "https://connect.medlineplus.gov/application?mainSearchCriteria.v.cs=2.16.840.1.113883.6.88&mainSearchCriteria.v.c="
     return redirect(base_url + rxcui)

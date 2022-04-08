@@ -1,5 +1,4 @@
 # Source: https://www.blog.pythonlibrary.org/2017/12/14/flask-101-adding-editing-and-displaying-data/
-from flask import url_for
 from flask_table import Table, Col, LinkCol
 
 
