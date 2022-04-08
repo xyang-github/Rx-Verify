@@ -206,7 +206,7 @@ def medication_add():
                     list_of_doses.append(dose.strip())
 
                 # Determine if the dose entered in the form matches a dose in RxTerms; if there is a match, will
-                # get the rxcui
+                # get the rxcui which will be later used in the API
                 try:
                     dose_index = list_of_doses.index(med_dose)
                     rxcui = response[2]['RXCUIS'][0][dose_index]
@@ -218,8 +218,9 @@ def medication_add():
                         key=[session['patient_id'], med_name, med_dose, med_directions, start_date, comment, rxcui]
                     )
 
+                    # Shows a message that medication has been added, and redirects to medmain
                     flash("Medication has been added")
-                    redirect(url_for("profile.mainmed"))
+                    return redirect(url_for("profile.medmain"))
 
                 except ValueError:
                     flash("The medication strength entered does not exist.")
@@ -227,9 +228,6 @@ def medication_add():
             # A value of 0 means there is no match for the medication name
             else:
                 flash("The medication name entered does not exist.")
-
-            # get rxcui
-            # if no rxcui, then incorrect drug entered
 
     return render_template("med_add.html", form=medication_form)
 

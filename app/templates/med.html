@@ -31,6 +31,10 @@
         </div>
     {% else %}
         <!-- Show medication table -->
+        <p>Active medications on record!</p>
+                    <a href="{{ url_for("profile.medication_add") }}">
+                <button type="button" class="btn btn-info">Add Medication</button>
+            </a>
 
     {% endif %}
 
