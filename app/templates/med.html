@@ -95,13 +95,13 @@
     {% else %}
         <!-- Show medication table -->
         {{table}}
-    {% endif %}
 
-        <div class="text-right" style="margin-top: 10px;">
+                <div class="text-right" style="margin-top: 10px;">
             <a href="{{ url_for("profile.active_medication_add") }}">
                 <button type="button" class="btn btn-info">Add Medication</button>
             </a>
         </div>
+    {% endif %}
     </div>
 
 

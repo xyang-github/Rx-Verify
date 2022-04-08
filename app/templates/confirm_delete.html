@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="text-align: center">
+    <p>Are you sure you want to delete the following entry?</p>
+        <p><strong>{{ med_name }}</strong></p>
+        <p><strong>{{ med_dose }}</strong></p>
+        <div style="width: 100%; display: inline-block; float: left; text-align: center">
+            <form method = "POST">
+            {{ form.confirm_btn(class="btn btn-info", id="confirm_delete_btn") }}
+            {{ form.cancel_btn(class="btn btn-secondary") }}
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

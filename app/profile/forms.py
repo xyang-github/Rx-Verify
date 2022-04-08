@@ -35,3 +35,9 @@ class MedicationEditForm(FlaskForm):
     comment = TextAreaField("Comments", validators=[Optional()])
     update_btn = SubmitField("Update")
     cancel_btn = SubmitField("Cancel")
+
+
+class MedicationDeleteForm(FlaskForm):
+    """The form used for deleting a medication entry"""
+    confirm_btn = SubmitField("Confirm")
+    cancel_btn = SubmitField("Cancel")

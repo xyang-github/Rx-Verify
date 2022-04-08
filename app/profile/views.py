@@ -328,7 +328,7 @@ def active_medication_edit(active_med_id):
     start_date = result[0][3]
 
     # Need to convert date from a string to a date object before inserting into the form, which is a DateField
-    if start_date == "":
+    if start_date is None:
         medication_edit_form.start_date.data = ""
     else:
         medication_edit_form.start_date.data = datetime.strptime(result[0][3], '%Y-%m-%d').date()
@@ -338,10 +338,36 @@ def active_medication_edit(active_med_id):
     return render_template("active_med_edit.html", form=medication_edit_form, med_name=result[0][0],
                            med_dose=result[0][1])
 
-@profile.route('/med_edit/<int:active_med_id>', methods=["GET", "POST"])
+
+@profile.route('/med_delete/<int:active_med_id>', methods=["GET", "POST"])
 @login_required
 def active_medication_delete(active_med_id):
-    return render_template("main.index.html")
+    """Delete the selected medication"""
+
+    # Instantiate delete medication form into its own variable
+    delete_medication_form = MedicationDeleteForm()
+
+    # Retrieve the med name and med dose using the active_med_id, and store the results in its own variable
+    result = query_select(
+        query="SELECT med_name, med_dose FROM active_med WHERE active_med_id = (?)",
+        key=active_med_id
+    )
+    med_name = result[0][0]
+    med_dose = result[0][1]
+
+    if delete_medication_form.confirm_btn.data:
+        query_change(
+            query="DELETE FROM active_med WHERE active_med_id = (?)",
+            key=str(active_med_id)
+        )
+
+        flash("Medication entry has been deleted")
+        return redirect(url_for("profile.medmain"))
+
+    if delete_medication_form.cancel_btn.data:
+        return redirect(url_for("profile.medmain"))
+
+    return render_template("confirm_delete.html", form=delete_medication_form, med_name=med_name, med_dose=med_dose)
 
 
 @profile.route('/medication_medline/<rxcui>', methods=["GET", "POST"])
