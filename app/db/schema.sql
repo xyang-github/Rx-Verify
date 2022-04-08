@@ -14,6 +14,7 @@ CREATE TABLE "active_med" (
 	"med_directions"	TEXT NOT NULL,
 	"med_start_date"	TEXT NOT NULL,
 	"comment"	TEXT,
+	"rxcui"	TEXT NOT NULL,
 	PRIMARY KEY("active_med_id" AUTOINCREMENT)
 );
 
@@ -26,8 +27,8 @@ CREATE TABLE "hist_med" (
 	"med_directions"	TEXT NOT NULL,
 	"med_end_date"	TEXT NOT NULL,
 	"comment"	TEXT,
+	"rxcui"	TEXT NOT NULL,
 	PRIMARY KEY("hist_med_id" AUTOINCREMENT)
-);
 
 CREATE TABLE "patient" (
 	"patient_id"	INTEGER NOT NULL,

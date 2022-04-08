@@ -30,6 +30,11 @@ def login():
             if user.email == email and Security().verify_password(user.password_hash, password):
                 login_user(user)
                 session['user_id'] = user.get_id()
+                session['patient_id'] = query_select(
+                    query="SELECT patient_id FROM patient WHERE user_id = (?)",
+                    key=session['user_id']
+                )[0][0]
+
                 next = request.args.get('next')
 
                 if next is None or not next.startswith('/'):
