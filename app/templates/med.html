@@ -48,7 +48,27 @@
 
     <div class="tab-pane fade" id="historical">
 
-    <!-- Content goes here -->
+        <!-- Use an if statement to show content based on the number of active medications -->
+        {% if historical_meds|length == 0 %}
+            <div style="text-align: center; margin-top: 10em;">
+                <p>No Historical Medications On File</p>
+            </div>
+            <div class="text-center">
+                <a href="{{ url_for("profile.historical_medication_add") }}">
+                    {{ form.add_btn(class="btn btn-info") }}
+                </a>
+            </div>
+
+        {% else %}
+            <!-- Show medication table -->
+            {{historical_table}}
+
+            <div class="text-right" style="margin-top: 10px;">
+                <a href="{{ url_for("profile.historical_medication_add") }}">
+                    {{ form.add_btn(class="btn btn-info") }}
+                </a>
+            </div>
+        {% endif %}
 
     </div>
 </div>

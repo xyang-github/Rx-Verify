@@ -4,6 +4,7 @@ from . import profile
 from flask import render_template, request, redirect, url_for, flash, session
 from .forms import *
 from .table import Active_Medications_Table
+from .table import Historical_Medications_Table
 from ..db.database_queries import query_select, query_change, query_medication_results
 from datetime import datetime
 
@@ -151,13 +152,20 @@ def medmain():
         key=str(patient_id)
     )
 
-    if len(list_of_active_medications) > 0:
+    list_of_historical_medications = query_medication_results(
+        query="SELECT hist_med_id, hist_med.patient_id, med_name, med_dose, med_directions, med_end_date, "
+              "comment, rxcui from hist_med INNER JOIN  patient ON hist_med.patient_id = patient.patient_id WHERE "
+              "hist_med.patient_id = (?)",
+        key=str(patient_id)
+    )
+
+    if len(list_of_active_medications) > 0 or len(list_of_historical_medications) > 0:
 
         # Store the results in a table using Flask-Table module
         table = Active_Medications_Table(list_of_active_medications)
+        historical_table = Historical_Medications_Table(list_of_historical_medications)
         return render_template("med.html", form=main_medication_form, active_meds=list_of_active_medications,
-                               table=table)
-
+                               historical_meds= list_of_historical_medications, table=table, historical_table = historical_table)
     # Enter code for historical medications here
 
     return render_template("med.html", form=main_medication_form, active_meds=list_of_active_medications)
@@ -239,6 +247,81 @@ def active_medication_add():
 
     return render_template("active_med_add.html", form=medication_form)
 
+@profile.route('/historical_med_add', methods=["GET", "POST"])
+@login_required
+def historical_medication_add():
+    """Displays the add medication page"""
+
+    # Instantiate form object
+    medication_form = MedicationHistoricalAddForm()
+
+    # Clicking the cancel button will go back to medmain page
+    if medication_form.cancel_btn.data:
+        return redirect(url_for("profile.medmain"))
+
+    # Clicking the add button will validate form field entries
+    if medication_form.add_btn.data:
+
+        # Store form fields into their own variables
+        med_directions = medication_form.med_directions.data
+        end_date = medication_form.end_date.data
+        comment = medication_form.comment.data
+
+        # Store the med name and dose in their own variables; the syntax is different, because the form fields do not
+        # use FlaskForm
+        med_name = request.form['rxterms']
+        med_dose = request.form['drug_strengths']
+
+        # Will display a warning if medication name field is blank
+        if med_name == "":
+            flash("Medication name cannot be blank")
+
+        # Will display a warning if medication strength field is blank
+        elif med_dose == "":
+            flash("Medication strength cannot be blank")
+
+        else:
+
+            # Construct url needed to send a request to RxTerms API
+            url_base = "https://clinicaltables.nlm.nih.gov/api/rxterms/v3/search?terms="
+            url_final = url_base + med_name + "&ef=STRENGTHS_AND_FORMS,RXCUIS"
+
+            # Send a request to RxTerms API
+            response = requests.get(url_final).json()
+
+            # A value of 1 means that one exact match for the name was found
+            if response[0] >= 1:
+
+                # Create a list of doses associated with the drug name, stripped of leading white space
+                list_of_doses = []
+                for dose in response[2]['STRENGTHS_AND_FORMS'][0]:
+                    list_of_doses.append(dose.strip())
+
+                # Determine if the dose entered in the form matches a dose in RxTerms; if there is a match, will
+                # get the rxcui which will be later used in the API
+                try:
+                    dose_index = list_of_doses.index(med_dose)
+                    rxcui = response[2]['RXCUIS'][0][dose_index]
+
+                    # Add new medication entry to the database
+                    query_change(
+                        query="INSERT INTO hist_med (patient_id, med_name, med_dose, med_directions, med_end_date, "
+                              "comment, rxcui) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                        key=[session['patient_id'], med_name, med_dose, med_directions, end_date, comment, rxcui]
+                    )
+
+                    # Shows a message that medication has been added, and redirects to medmain
+                    flash("Medication has been added")
+                    return redirect(url_for("profile.medmain"))
+
+                except ValueError:
+                    flash("The medication strength entered does not exist.")
+
+            # A value of 0 means there is no match for the medication name
+            else:
+                flash("The medication name entered does not exist.")
+
+    return render_template("historical_med_add.html", form=medication_form)
 
 @profile.route('/med_edit/<int:active_med_id>', methods=["GET", "POST"])
 @login_required

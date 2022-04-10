@@ -19,3 +19,17 @@ class Active_Medications_Table(Table):
                      anchor_attrs={'class': 'delete_link'})
     medline = LinkCol('', 'profile.medication_medline', url_kwargs=dict(rxcui='rxcui'),
                       anchor_attrs={'class': 'medline_link'})
+
+
+class Historical_Medications_Table(Table):
+    """Table used to display historical medications"""
+    classes = ['class1']
+    active_med_id = Col('med_id', show=False)
+    patient_id = Col('patient_id', show=False)
+    med_name = Col('Medication Name')
+    med_dose = Col('Medication Strength')
+    med_directions = Col('Directions')
+    med_end_date = Col('Date End')
+    comment = Col('Comment')
+    rxcui = Col('rxcui', show=False)
+
