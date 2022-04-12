@@ -54,3 +54,11 @@ class MedicationHistoricalAddForm(FlaskForm):
     comment = TextAreaField("Comments", validators=[Optional()])
     add_btn = SubmitField("Add")
     cancel_btn = SubmitField("Cancel")
+
+class MedicationHistoricalEditForm(FlaskForm):
+    """The form used for adding new medications"""
+    med_directions = StringField("Directions", validators=[DataRequired()])
+    end_date = DateField("Date End", validators=[Optional()])
+    comment = TextAreaField("Comments", validators=[Optional()])
+    update_btn = SubmitField("Update")
+    cancel_btn = SubmitField("Cancel")

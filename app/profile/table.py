@@ -24,7 +24,7 @@ class Active_Medications_Table(Table):
 class Historical_Medications_Table(Table):
     """Table used to display historical medications"""
     classes = ['class1']
-    active_med_id = Col('med_id', show=False)
+    hist_med_id = Col('med_id', show=False)
     patient_id = Col('patient_id', show=False)
     med_name = Col('Medication Name')
     med_dose = Col('Medication Strength')
@@ -32,4 +32,8 @@ class Historical_Medications_Table(Table):
     med_end_date = Col('Date End')
     comment = Col('Comment')
     rxcui = Col('rxcui', show=False)
+    edit = LinkCol('', 'profile.historical_medication_edit', url_kwargs=dict(historical_med_id='hist_med_id'),
+                   anchor_attrs={'class': 'edit_link'})
+    delete = LinkCol('', 'profile.historical_medication_delete', url_kwargs=dict(historical_med_id='hist_med_id'),
+                     anchor_attrs={'class': 'delete_link'})
 
