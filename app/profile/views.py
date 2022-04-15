@@ -6,7 +6,7 @@ from .forms import *
 from .table import Active_Medications_Table
 from .table import Historical_Medications_Table
 from ..db.database_queries import query_select, query_change, query_medication_results
-from datetime import datetime
+from datetime import datetime, date
 
 
 @profile.route('/profile', methods=["GET", "POST"])
@@ -323,6 +323,7 @@ def historical_medication_add():
 
     return render_template("historical_med_add.html", form=medication_form)
 
+
 @profile.route('/med_edit/<int:active_med_id>', methods=["GET", "POST"])
 @login_required
 def active_medication_edit(active_med_id):
@@ -336,6 +337,38 @@ def active_medication_edit(active_med_id):
 
     # If the cancel button is clicked, will return to medmain page
     if medication_edit_form.cancel_btn.data:
+        return redirect(url_for("profile.medmain"))
+
+    # If the toggle button is clicked, will delete medication from active medication and add it to historical medication
+    if medication_edit_form.toggle_btn.data:
+
+        # Store today's date into a variable
+        current_date = date.today()
+
+        # Get active medication's information
+        active_med = query_select(
+            query="SELECT patient_id, med_name, med_dose, med_directions, comment, rxcui FROM "
+                  "active_med WHERE active_med_id = (?)",
+            key=active_med_id
+        )
+
+        print(active_med)
+
+        # Add new entry into historical medication table
+        query_change(
+            query="INSERT INTO hist_med (patient_id, med_name, med_dose, med_directions, med_end_date, comment, rxcui)"
+                  "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            key=[active_med[0][0], active_med[0][1], active_med[0][2], active_med[0][3], current_date, active_med[0][4],
+                 active_med[0][5]]
+        )
+
+        # Delete entry from active medication table
+        query_change(
+            query="DELETE FROM active_med WHERE active_med_id = (?)",
+            key=str(active_med_id)
+        )
+
+        flash("Active medication has been moved historical medications")
         return redirect(url_for("profile.medmain"))
 
     if medication_edit_form.update_btn.data and medication_edit_form.validate():

@@ -38,6 +38,7 @@ class MedicationEditForm(FlaskForm):
     med_directions = StringField("Directions", validators=[DataRequired()])
     start_date = DateField("Date Started", validators=[Optional()])
     comment = TextAreaField("Comments", validators=[Optional()])
+    toggle_btn = SubmitField("No longer taking")
     update_btn = SubmitField("Update")
     cancel_btn = SubmitField("Cancel")
 
