@@ -36,4 +36,3 @@ class Historical_Medications_Table(Table):
                    anchor_attrs={'class': 'edit_link'})
     delete = LinkCol('', 'profile.historical_medication_delete', url_kwargs=dict(historical_med_id='hist_med_id'),
                      anchor_attrs={'class': 'delete_link'})
-

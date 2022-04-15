@@ -148,7 +148,7 @@ def medmain():
     list_of_active_medications = query_medication_results(
         query="SELECT active_med_id, active_med.patient_id, med_name, med_dose, med_directions, med_start_date, "
               "comment, rxcui from active_med INNER JOIN  patient ON active_med.patient_id = patient.patient_id WHERE "
-              "active_med.patient_id = (?)",
+              "active_med.patient_id = (?) ORDER BY med_name ASC",
         key=str(patient_id)
     )
 
