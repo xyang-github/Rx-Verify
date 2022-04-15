@@ -28,7 +28,7 @@ CREATE TABLE "hist_med" (
 	"med_end_date"	TEXT,
 	"comment"	TEXT,
 	"rxcui"	TEXT NOT NULL,
-	PRIMARY KEY("hist_med_id" AUTOINCREMENT)
+	PRIMARY KEY("hist_med_id" AUTOINCREMENT));
 
 CREATE TABLE "patient" (
 	"patient_id"	INTEGER NOT NULL,

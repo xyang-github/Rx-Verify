@@ -3,6 +3,7 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="med.css")}}">
 {% endblock %}
 
@@ -72,5 +73,31 @@
 
     </div>
 </div>
+
+    <!-- modal -->
+    <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentModalLabel">Comment</h5>
+                </div>
+
+                <div class="modal-body">
+                    <p id="modal_body"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS for modal that displays any comments that are clicked on. -->
+    <script type="text/javascript">
+        $('.comment').on('click', function() {
+            let comment = $(this).text();
+            if (comment !== "" && comment !== "Comment") {
+                $("#modal_body").html(comment);
+                $('#commentModal').modal('show');
+            }
+        })
+    </script>
 
 {% endblock %}

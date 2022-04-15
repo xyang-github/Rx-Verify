@@ -11,7 +11,7 @@ class Active_Medications_Table(Table):
     med_dose = Col('Medication Strength')
     med_directions = Col('Directions')
     med_start_date = Col('Date Started')
-    comment = Col('Comment')
+    comment = Col('Comment', column_html_attrs={'class': 'comment'})
     rxcui = Col('rxcui', show=False)
     edit = LinkCol('', 'profile.active_medication_edit', url_kwargs=dict(active_med_id='active_med_id'),
                    anchor_attrs={'class': 'edit_link'})
@@ -30,7 +30,7 @@ class Historical_Medications_Table(Table):
     med_dose = Col('Medication Strength')
     med_directions = Col('Directions')
     med_end_date = Col('Date End')
-    comment = Col('Comment')
+    comment = Col('Comment', column_html_attrs={'class': 'comment'})
     rxcui = Col('rxcui', show=False)
     edit = LinkCol('', 'profile.historical_medication_edit', url_kwargs=dict(historical_med_id='hist_med_id'),
                    anchor_attrs={'class': 'edit_link'})

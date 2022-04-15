@@ -62,3 +62,7 @@ alert-error {
     margin: 0;
     color: red;
 }
+
+tbody>tr:hover {
+    background-color: beige;
+}
