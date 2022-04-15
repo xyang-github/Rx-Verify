@@ -22,6 +22,7 @@
             {% endif %}
 
             <li><a href="">Drug Interactions</a></li>
+            <li><a href="{{ url_for("main.guide") }}">User Guide</a></li>
 
             {% if current_user.is_authenticated  %}
                 <li><a href="{{ url_for("profile.medmain") }}">Medications</a></li>

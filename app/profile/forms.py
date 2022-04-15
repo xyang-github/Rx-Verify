@@ -16,7 +16,7 @@ class PatientProfileForm(FlaskForm):
         message="Allergies can only contain letters. If more than one, separate by a comma."), Optional()])
     edit = SubmitField("Edit Profile")
     update = SubmitField("Update Profile")
-    cancel = SubmitField("Cancel")
+    cancel = SubmitField("Cancel", render_kw={'formnovalidate': True})
 
 
 class MedicationMainForm(FlaskForm):
@@ -30,7 +30,7 @@ class MedicationAddForm(FlaskForm):
     start_date = DateField("Date Started", validators=[Optional()])
     comment = TextAreaField("Comments", validators=[Optional()])
     add_btn = SubmitField("Add")
-    cancel_btn = SubmitField("Cancel")
+    cancel_btn = SubmitField("Cancel", render_kw={'formnovalidate': True})
 
 
 class MedicationEditForm(FlaskForm):
@@ -40,13 +40,14 @@ class MedicationEditForm(FlaskForm):
     comment = TextAreaField("Comments", validators=[Optional()])
     toggle_btn = SubmitField("No longer taking")
     update_btn = SubmitField("Update")
-    cancel_btn = SubmitField("Cancel")
+    cancel_btn = SubmitField("Cancel", render_kw={'formnovalidate': True})
 
 
 class MedicationDeleteForm(FlaskForm):
     """The form used for deleting a medication entry"""
     confirm_btn = SubmitField("Confirm")
-    cancel_btn = SubmitField("Cancel")
+    cancel_btn = SubmitField("Cancel", render_kw={'formnovalidate': True})
+
 
 class MedicationHistoricalAddForm(FlaskForm):
     """The form used for adding new medications"""
@@ -54,7 +55,8 @@ class MedicationHistoricalAddForm(FlaskForm):
     end_date = DateField("Date End", validators=[Optional()])
     comment = TextAreaField("Comments", validators=[Optional()])
     add_btn = SubmitField("Add")
-    cancel_btn = SubmitField("Cancel")
+    cancel_btn = SubmitField("Cancel", render_kw={'formnovalidate': True})
+
 
 class MedicationHistoricalEditForm(FlaskForm):
     """The form used for adding new medications"""
@@ -62,4 +64,4 @@ class MedicationHistoricalEditForm(FlaskForm):
     end_date = DateField("Date End", validators=[Optional()])
     comment = TextAreaField("Comments", validators=[Optional()])
     update_btn = SubmitField("Update")
-    cancel_btn = SubmitField("Cancel")
+    cancel_btn = SubmitField("Cancel", render_kw={'formnovalidate': True})

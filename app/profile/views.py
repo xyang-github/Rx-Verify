@@ -610,6 +610,7 @@ def historical_medication_delete(historical_med_id):
 
     return render_template("confirm_delete.html", form=delete_medication_form, med_name=med_name, med_dose=med_dose)
 
+
 @profile.route('/medication_medline/<rxcui>', methods=["GET", "POST"])
 def medication_medline(rxcui):
     """Will redirect to Medline, which contains information about the specific medication based on the rxcui value"""

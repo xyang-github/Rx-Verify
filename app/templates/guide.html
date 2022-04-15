@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>User Guide</h1>
+
+    <div class="container-fluid">
+        <div class="row row_margin">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='img/main.png') }}" style="width: 100%;" alt="main splash page">
+            </div>
+            <div class="col-md-4">
+                <div>
+                    Rx Verify provides a <strong>drug interaction tool</strong> for all users. An account is required to access
+                    the <strong>Medication</strong> page, which is where you can keep track of current and past medications, and
+                    access information related to those medications.
+                </div>
+
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <div class="row row_margin">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='img/register.png') }}" style="width: 100%;"
+                     alt="registration page">
+            </div>
+            <div class="col-md-4">
+                <div>
+                    When completing the registration form, some patient information will be required to make a profile.
+                    After submitting the form, a confirmation email will be sent to the provided email address.
+                </div>
+
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <div class="row row_margin">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='img/medication-main.png') }}" style="width: 100%;"
+                     alt="picture of the main medication page">
+            </div>
+            <div class="col-md-4">
+                <div>
+                    The Medication page contains an Active Medication tab and a Historical Medication tab. The Active
+                    Medication tab will contain a list of medications you are currently taking. The Historical
+                    Medication tab will contain information you are no longer taking.
+                </div>
+
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <div class="row row_margin">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='img/medication-add1.png') }}" style="width: 100%;"
+                     alt="picture of the medication page when adding a new medication">
+            </div>
+            <div class="col-md-4">
+                <div>
+                    When adding an active or historical medication, you will be prompted to enter information
+                    pertaining to the medication itself. Required fields include the medication name, the strength and
+                    directions. Note that a medication name will be suggested based on what you type - you will need to
+                    select one of the suggestions. The same can be said for the medication strength - you will need to
+                    select from the suggested list.
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <div class="row row_margin">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='img/medication-add2.png') }}" style="width: 100%;"
+                     alt="picture of the medication page when adding a new medication">
+            </div>
+            <div class="col-md-4">
+                <div>
+                    Once a medication is listed, you will be able to view the information that was entered. If you click
+                    on the Comment column, a pop-up will show you the text you entered. On the right side, each entry
+                    will contain icons that allow you to edit and delete entries. For active medications, a third icon
+                    will redirect you to a page from the MedlinePlus for additional information.
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <div class="row row_margin">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='img/medication-edit.png') }}" style="width: 100%;"
+                     alt="picture of the medication page when editing a medication">
+            </div>
+            <div class="col-md-4">
+                <div>
+                    When editing a medication entry, you will be able to make changes to any of the information you had
+                    originally entered. For active medications, there is an additional option to move an entry to
+                    historical records. This is for the purpose of medications you are no longer actively taking.
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+{% endblock %}

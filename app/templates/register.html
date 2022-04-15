@@ -53,24 +53,24 @@
 
             <div class="col-md-2">
                 <label for="middle_initial" class="form-label">{{ form.minitial.label }}</label>
-                {{ form.minitial(class="form-control", id="middle_initial") }}
+                {{ form.minitial(class="form-control", id="middle_initial", placeholder="optional") }}
             </div>
         </div>
 
         <div class="row row_margin">
-            <div class="col-sm-5">
+            <div class="col-sm-4">
                 <label for="date_of_birth" class="form-label">{{ form.dob.label }}</label>
                 {{ form.dob(class="form-control", id="date_of_birth") }}
             </div>
 
             <div class="col-sm-2">
                 <label for="weight" class="form-label">{{ form.weight.label }}</label>
-                {{ form.weight(class="form-control", id="weight") }}
+                {{ form.weight(class="form-control", id="weight", placeholder="optional") }}
             </div>
 
-            <div class="col-sm-5">
+            <div class="col-sm-6">
                 <label for="allergies" class="form-label">{{ form.allergies.label }}</label>
-                {{ form.allergies(class="form-control", id="allergies") }}
+                {{ form.allergies(class="form-control", id="allergies", placeholder="optional") }}
             </div>
         </div>
 
