@@ -95,12 +95,13 @@ def edit():
         return redirect(url_for("profile.profile_main"))
 
     # set form objects to patient information
-    profile_form_edit.fname.data = patient[0][1]
-    profile_form_edit.lname.data = patient[0][2]
-    profile_form_edit.minitial.data = patient[0][3]
-    profile_form_edit.dob.data = datetime.strptime(patient[0][4], '%m-%d-%Y').date()
-    profile_form_edit.weight.data = patient[0][5]
-    profile_form_edit.allergies.data = allergies_string
+    if request.method == "GET":
+        profile_form_edit.fname.data = patient[0][1]
+        profile_form_edit.lname.data = patient[0][2]
+        profile_form_edit.minitial.data = patient[0][3]
+        profile_form_edit.dob.data = datetime.strptime(patient[0][4], '%m-%d-%Y').date()
+        profile_form_edit.weight.data = patient[0][5]
+        profile_form_edit.allergies.data = allergies_string
 
     return render_template("profile_edit.html", form=profile_form_edit)
 

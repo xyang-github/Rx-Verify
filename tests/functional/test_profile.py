@@ -53,15 +53,34 @@ def test_edit_information(test_client):
         "minitial": "",
         "dob": "1989-02-28",
         "weight": "",
-        "allergies": ""
+        "allergies": "",
+        "update": True
     }
 
     response = test_client.post('/edit', data=data, follow_redirects=True)
-    print(response.data)
 
     assert response.status_code == 200
     assert b'Profile has been updated' in response.data
+    assert b'Jane' in response.data
+    assert len(response.history) == 1
 
 
+def test_cancel_button(test_client):
+    """Test the cancel button redirects back to the main profile page"""
 
-# Test cancel button works
+    query_change(
+        query="INSERT INTO patient (patient_id, user_id, fname, lname, dob) VALUES (?, ?, ?, ?, ?)",
+        key=[1, 1, "John", "Doe", "02-28-1989"]
+    )
+
+    with test_client.session_transaction() as session:
+        session['patient_id'] = 1
+
+    data = {
+        "cancel": True
+    }
+
+    response = test_client.post('/edit', data=data, follow_redirects=True)
+    assert b'Profile' in response.data
+    assert b'Edit' in response.data
+    assert len(response.history) == 1
