@@ -14,7 +14,7 @@ def test_client():
         ctx.push()
 
         with app.open_resource('db/schema.sql', mode='r') as f:
-            con = sqlite3.connect('app/db/db.db')
+            con = sqlite3.connect('app/db/test.db')
             cur = con.cursor()
             cur.executescript(f.read())
             con.commit()

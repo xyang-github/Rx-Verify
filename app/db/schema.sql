@@ -1,4 +1,3 @@
-
 DROP TABLE IF EXISTS active_med;
 DROP TABLE IF EXISTS hist_med;
 DROP TABLE IF EXISTS patient;

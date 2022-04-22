@@ -1,4 +1,4 @@
-from app.db.database_queries import query_select, query_change
+from app.db.database_queries import query_change, query_select
 
 
 def test_change():
@@ -8,6 +8,7 @@ def test_change():
             query="INSERT INTO user (email, password) VALUES (?, ?)",
             key=["123@hotmail.com", "password"]
         )
+        assert True
     except:
         assert False
 

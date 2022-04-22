@@ -1,6 +1,8 @@
 import sqlite3
 
-path = "app/db/db.db"
+
+path = "app/db/test.db"
+# path = "app/db/db.db"
 
 
 def query_select(query, key):

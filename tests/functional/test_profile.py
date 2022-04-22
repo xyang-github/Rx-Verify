@@ -8,12 +8,14 @@ def test_profile_main(test_client):
         key=[1, 1, "John", "Doe", "02-28-1989"]
     )
 
+    # Source: https://stackoverflow.com/questions/43104688/accessing-session-object-during-unit-test-of-flask-application
     with test_client.session_transaction() as session:
         session['patient_id'] = 1
 
     response = test_client.get("/profile", follow_redirects=True)
     assert response.status_code == 200
     assert b'Profile' in response.data
+    assert b'John' in response.data
 
 
 def test_edit_profile(test_client):
@@ -24,13 +26,14 @@ def test_edit_profile(test_client):
         key=[1, 1, "John", "Doe", "02-28-1989"]
     )
 
-    # Source: https://stackoverflow.com/questions/43104688/accessing-session-object-during-unit-test-of-flask-application
     with test_client.session_transaction() as session:
         session['patient_id'] = 1
 
     response = test_client.get("/edit")
+
     assert response.status_code == 200
     assert b'Update Profile' in response.data
+    assert b'John' in response.data
 
 
 def test_edit_information(test_client):
@@ -47,11 +50,18 @@ def test_edit_information(test_client):
     data = {
         "fname": "Jane",
         "lname": "Doe",
-        "dob": "1989-02-28"
+        "minitial": "",
+        "dob": "1989-02-28",
+        "weight": "",
+        "allergies": ""
     }
 
-    response = test_client.post(data=data)
+    response = test_client.post('/edit', data=data, follow_redirects=True)
+    print(response.data)
 
     assert response.status_code == 200
-    assert b'Rx Verify' in response.data
+    assert b'Profile has been updated' in response.data
 
+
+
+# Test cancel button works

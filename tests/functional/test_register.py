@@ -1,5 +1,7 @@
 import sqlite3
 
+from bs4 import BeautifulSoup
+
 path_dev = 'app/db/db.db'
 path_test = 'app/db/test.db'
 
@@ -58,8 +60,8 @@ def test_allergy_table():
     assert len(result) == 1
 
 
-def test_name_fields(test_client):
-    """Test that validation for first and last name form fields are working"""
+def test_blank_name_fields(test_client):
+    """Test that first and last name form fields cannot be blank"""
     data = {"fname": "", "lname": ""}
     response = test_client.post('/register', data=data, follow_redirects=True)
     assert b'First name cannot be blank' in response.data
@@ -77,7 +79,7 @@ def test_name_fields(test_client):
 def test_duplicate_email(test_client):
     """Test that a warning is raised when trying to register with an email that is already in the database"""
 
-    con = sqlite3.connect(path_dev)
+    con = sqlite3.connect(path_test)
     cur = con.cursor()
     cur.execute("INSERT INTO user (email, password) VALUES ('123@yahoo.com', 'cat')")
     con.commit()
@@ -90,24 +92,27 @@ def test_duplicate_email(test_client):
             "password": "Starfish110!",
             "password2": "Starfish110!"}
 
-    response1 = test_client.post('/register', data=data, follow_redirects=True)
-    html = response1.get_data(as_text=True)
+    response = test_client.post('/register', data=data, follow_redirects=True)
 
-    assert 'Email already registered' in html
+    assert b'Email already registered' in response.data
+    assert response.status_code == 200
+    assert len(response.history) == 1
 
 
-# def test_correct_registration(test_client):
-#     """Test that a confirmation email is sent when registering"""
-#
-#     data = {"email": "123@yahoo.com",
-#             "fname": "John",
-#             "lname": "Doe",
-#             "dob": "1989-02-28",
-#             "password": "Starfish110!",
-#             "password2": "Starfish110!"}
-#
-#     response = test_client.post('/register', data=data, follow_redirects=True)
-#     html = response.get_data(as_text=True)
-#
-#     assert response.status_code == 200
-#     assert 'A confirmation email has been sent' in html
+def test_correct_registration(test_client):
+    """Test that a confirmation email is sent when registering"""
+
+    data = {"email": "12345@yahoo.com",
+            "fname": "John",
+            "lname": "Doe",
+            "minitial": "",
+            "dob": "1989-02-28",
+            "weight": "",
+            "allergies": "",
+            "password": "AbcdeFG111!",
+            "password2": "AbcdeFG111!"}
+
+    response = test_client.post('/register', data=data, follow_redirects=True)
+
+    assert response.status_code == 200
+    assert b'A confirmation email has been sent' in response.data
