@@ -21,7 +21,7 @@
                 <li class="active"><a href="{{ url_for("main.index") }}">Main</a></li>
             {% endif %}
 
-            <li><a href="">Drug Interactions</a></li>
+            <li><a href="{{ url_for("interaction.interaction_main") }}">Drug Interactions</a></li>
             <li><a href="{{ url_for("main.guide") }}">User Guide</a></li>
 
             {% if current_user.is_authenticated  %}

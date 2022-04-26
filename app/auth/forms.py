@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import *
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo, Optional, NumberRange
-import email_validator
 
 
 class RegistrationForm(FlaskForm):

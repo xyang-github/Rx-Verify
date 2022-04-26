@@ -35,4 +35,7 @@ def create_app(config_name):
     from .db import db as db_blueprint
     app.register_blueprint(db_blueprint)
 
+    from .interaction import interaction as interaction_blueprint
+    app.register_blueprint(interaction_blueprint)
+
     return app

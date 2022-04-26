@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+    <link href='https://clinicaltables.nlm.nih.gov/autocomplete-lhc-versions/17.0.2/autocomplete-lhc.min.css'
+          rel="stylesheet">
+{% endblock %}
+
+{% block page_content %}
+<h1>Drug Interaction</h1>
+
+<div class="container-fluid">
+    <form method="POST">
+    {{ form.csrf_token }}
+
+    <div class = "row">
+        <div class="col-md-6">
+            <label for="medication name" class="form-label">Medication Name</label>
+            <input type="text" class="form-control" id="rxterms" name="rxterms">
+        </div>
+        <div class="col-md-1">
+            {{ form.btn_add(class="btn btn-info") }}
+        </div>
+        <div class="col-md-5"></div>
+    </div>
+    <div class = "row">
+    <div class="col-md-6">
+        {# Only show the drug list if the list is not empty #}
+        {% if list | length > 0 %}
+            <select class="form-select">
+            {% for key in list %}
+                <option>{{ key[0] }}</option>
+            {% endfor %}
+            </select>
+        {% endif %}
+    </div>
+    <div class="col-md-1">
+        {# Only show the drug list's remove button if the list is not empty #}
+        {% if list | length > 0 %}
+            {{ form.btn_remove(class="btn btn-info") }}
+        {% endif %}
+    </div>
+    <div class="col-md-6"></div>
+    </div>
+
+    </form>
+    <div class="row">
+    {# Display results #}
+    </div>
+</div>
+
+<!-- JQuery and JS needed for autocomplete-lhc feature;
+source: https://clinicaltables.nlm.nih.gov/apidoc/rxterms/v3/doc.html -->
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
+<script src='https://clinicaltables.nlm.nih.gov/autocomplete-lhc-versions/17.0.2/autocomplete-lhc.min.js'></script>
+<script>
+    new Def.Autocompleter.Search('rxterms',
+        'https://clinicaltables.nlm.nih.gov/api/rxterms/v3/search?ef=STRENGTHS_AND_FORMS');
+    Def.Autocompleter.Event.observeListSelections('rxterms', function() {
+    });
+
+    <!-- Prevent the enter key from submitting a form by mistake -->
+    $(document).ready(function() {
+      $(window).keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          return false;
+        }
+      });
+    });
+</script>
+
+
+{% endblock %}

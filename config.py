@@ -7,13 +7,13 @@ class Config:
     WTF_CSRF_ENABLED = True
 
     # Mail config
-    LOGIN_MAIL_SENDER = 'LOGIN ADMIN <0c6e22c1b5-f075dd@inbox.mailtrap.io>'
-    LOGIN_MAIL_SUBJECT_PREFIX = '[Company]'
+    LOGIN_MAIL_SENDER = 'LOGIN ADMIN <rxverify.cs195@gmail.com>'
+    LOGIN_MAIL_SUBJECT_PREFIX = '[Rx Verify]'
     LOGIN_ADMIN = os.environ.get('LOGIN_ADMIN')
-    MAIL_SERVER = 'smtp.mailtrap.io'
-    MAIL_PORT = 2525
-    MAIL_USERNAME = 'b4cdd9e31c1cfc'
-    MAIL_PASSWORD = '1b16b9aeffcc0e'
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USERNAME = 'rxverify.cs195@gmail.com'
+    MAIL_PASSWORD = 'nfhkrljawqbswlvi'
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
 
