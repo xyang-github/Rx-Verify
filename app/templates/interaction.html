@@ -23,30 +23,50 @@
         </div>
         <div class="col-md-5"></div>
     </div>
+
     <div class = "row">
-    <div class="col-md-6">
-        {# Only show the drug list if the list is not empty #}
-        {% if list | length > 0 %}
-            <select class="form-select">
-            {% for key in list %}
-                <option>{{ key[0] }}</option>
-            {% endfor %}
-            </select>
-        {% endif %}
-    </div>
-    <div class="col-md-1">
-        {# Only show the drug list's remove button if the list is not empty #}
-        {% if list | length > 0 %}
-            {{ form.btn_remove(class="btn btn-info") }}
-        {% endif %}
-    </div>
-    <div class="col-md-6"></div>
+        <input type="checkbox" id="include_rx" name="include_rx" value="include_rx">
+        <label for="include_rx"> Click here to include your active medications</label>
     </div>
 
-    </form>
-    <div class="row">
-    {# Display results #}
+    <div class = "row">
+        <div class="col-md-6">
+            {# Only show the drug list if the list is not empty #}
+            {% if list | length > 0 %}
+                <select class="form-select" id = "med_list" name = "med_list" size = 10>
+                {% for key in list %}
+                    <option>{{ key }}</option>
+                {% endfor %}
+                </select>
+            {% endif %}
+        </div>
+        <div class="col-md-1">
+            {# Only show the drug list's remove button if the list is not empty #}
+            {% if list | length > 0 %}
+                {{ form.btn_remove(class="btn btn-info") }}
+            {% endif %}
+        </div>
+        <div class="col-md-6"></div>
     </div>
+
+
+    <div class="row">
+        {{ form.btn_submit(class="btn btn-info") }}
+    </div>
+    </form>
+
+    {% if result | length > 0 %}
+    <div class="row">
+        <h4>Drug interaction result</h4>
+
+        {% for key in result %}
+            <div class = "result-block">
+                <p class = "interaction-names">{{ key[0] }} and {{ key[1] }}</p>
+                {{ key[3] }}
+            </div>
+            {% endfor %}
+    </div>
+    {% endif %}
 </div>
 
 <!-- JQuery and JS needed for autocomplete-lhc feature;
