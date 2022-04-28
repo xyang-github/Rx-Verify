@@ -2,9 +2,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 from flask_login import UserMixin
+# Adapted from Flask Web Development: Developing Web Applications with Python 2nd Edition,  978-1491991732
 
 
 class User(UserMixin):
+    """
+    Used for login purposes to store user information;
+    Source: https://stackoverflow.com/questions/63231163/what-is-the-usermixin-in-flask
+    """
     def __init__(self, id, email, password_hash, confirmed):
         self.id = id
         self.email = email

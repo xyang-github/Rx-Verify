@@ -1,21 +1,23 @@
 from flask import render_template, flash, request, session, redirect, url_for
-from flask_login import login_required
-
 from app.interaction.forms import DrugInteractionForm
 from . import interaction
 import requests
-
 from ..db.database_queries import query_select
 
+# A dictionary to contain the key:value pair as medication name: medication rxcui; the rxcui is a number identifying a
+# medication and is used in the NLM's API
 dict_of_meds_name_rxcui = {}
 
 
 @interaction.route('/interaction', methods=["GET", "POST"])
 def interaction_main():
-    interaction_form = DrugInteractionForm()
-    interaction_list = list()
+    """View function for the drug interaction tool"""
 
-    # When the add button is clicked, will store the drug name and its rxcui as a dictionary
+    interaction_form = DrugInteractionForm()
+    interaction_list = list()  # Will be used to store the result of running the tool
+
+    # When the add button is clicked, will store the name of the drug in the text box along with its rxcui into the
+    # dictionary
     if interaction_form.btn_add.data:
         med_name = request.form['rxterms']
 
@@ -26,7 +28,7 @@ def interaction_main():
             # Create a dictionary of med name and its rxcui
             dict_of_meds_name_rxcui[med_name] = get_rxcui(med_name)
 
-    # If the remove button is clicked, will remove the selected med name
+    # If the remove button is clicked, will remove the selected med name from the dictionary
     if interaction_form.btn_remove.data:
         remove_med = request.form['med_list']
         dict_of_meds_name_rxcui.pop(remove_med, None)
@@ -48,6 +50,7 @@ def interaction_main():
             flash("Must enter at least two medications to run an interaction")
         else:
 
+            # Convert the list of rxcui into a string delimited with the '+' sign
             drug_string = '+'.join(list(dict_of_meds_name_rxcui.values()))
 
             # Construct request url
@@ -71,6 +74,8 @@ def interaction_main():
             except KeyError:
                 interaction_list.append("There is no reported drug interaction")
 
+        # This is important to clear the dictionary. Otherwise, the form will contain the previous submission even
+        # when the user is logged out
         dict_of_meds_name_rxcui.clear()
 
     return render_template("interaction.html", form=interaction_form, list=dict_of_meds_name_rxcui,
