@@ -85,3 +85,16 @@ img {
 .interaction-names {
     font-weight: bold;
 }
+
+#disclaimer-text {
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+#drug_intx_remove {
+    float: right;
+}
+
+#drug_tx_submit {
+    width: 100%;
+}

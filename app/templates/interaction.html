@@ -9,76 +9,78 @@
 {% block page_content %}
 <h1>Drug Interaction</h1>
 
+<!-- Disclaimer for using the interaction tool -->
+<div id="disclaimer-text" class="alert-info">
+    <small>
+    The drug interaction tool uses information from the National Library of Medicine (NLM). It is not the intention of
+    NLM to provide specific medical advice but rather to provide users with information to better understand their
+    health and their diagnosed disorders. Specific medical advice will not be provided, and NLM urges you to consult
+    with a qualified physician for diagnosis and for answers to your personal questions.
+    </small>
+</div>
+
+
 <div class="container-fluid">
     <form method="POST">
     {{ form.csrf_token }}
 
     <div class = "row">
         <div class="col-md-6">
-            <label for="medication name" class="form-label">Medication Name</label>
-            <input type="text" class="form-control" id="rxterms" name="rxterms">
-        </div>
-        <div class="col-md-1">
-            {{ form.btn_add(class="btn btn-info") }}
-        </div>
-        <div class="col-md-5"></div>
-    </div>
+        <!-- Row for medication entry -->
+            <div class="row row_margin">
+                <label for="medication name" class="form-label">Medication Name</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="rxterms" name="rxterms">
+                    <span class="input-group-btn">{{ form.btn_add(class="btn btn-primary") }}</span>
+                </div>
+            </div>
+        <!-- Row for checkbox to include active medication -->
+        {% if current_user.is_authenticated %}
+            <div class="row row_margin">
+                <input type="checkbox" id="include_rx" name="include_rx" value="include_rx">
+                <label for="include_rx"> Click here to include your active medications</label>
+            </div>
+        {% endif %}
+        <!-- Row to include select input to show medication entries -->
+            <div class="row row_margin">
+                {% if list | length > 0 %}
+                    <select style="width: 80%; float: left" class="form-control" id = "med_list" name = "med_list"
+                            size = {{ list | length }}>
+                    {% for key in list %}
+                        <option>{{ key }}</option>
+                    {% endfor %}
+                    </select>
 
-    <div class = "row">
-        <input type="checkbox" id="include_rx" name="include_rx" value="include_rx">
-        <label for="include_rx"> Click here to include your active medications</label>
-    </div>
-
-    <div class = "row">
+                    {{ form.btn_remove(class="btn btn-danger", id="drug_intx_remove") }}
+                {% endif %}
+            </div>
+        <!-- Row to include the submit button -->
+{#            {% if list | length > 1 %}#}
+                <div class="row row_margin">
+                    {{ form.btn_submit(class="btn btn-info", id="drug_tx_submit") }}
+                </div>
+{#            {% endif %}#}
+        </div>
         <div class="col-md-6">
-            {# Only show the drug list if the list is not empty #}
-            {% if list | length > 0 %}
-                <select class="form-select" id = "med_list" name = "med_list" size = 10>
-                {% for key in list %}
-                    <option>{{ key }}</option>
-                {% endfor %}
-                </select>
-            {% endif %}
+        <!-- Displays the results -->
+            {% if result | length > 0 %}
+                <h4>Drug interaction result</h4>
+                <!-- Display a message if there is no drug interaction -->
+                {% if result[0] == "There is no reported drug interaction" %}
+                    <div class = "result-block">There is no reported drug interaction</div>
+                {% else %}
+                <!-- Display a message if there is at least one drug interaction -->
+                    {% for key in result %}
+                        <div class = "result-block">
+                            <p class = "interaction-names">{{ key[0] }} and {{ key[1] }}</p>
+                            {{ key[3] }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
         </div>
-        <div class="col-md-1">
-            {# Only show the drug list's remove button if the list is not empty #}
-            {% if list | length > 0 %}
-                {{ form.btn_remove(class="btn btn-info") }}
             {% endif %}
-        </div>
-        <div class="col-md-6"></div>
-    </div>
-
-
-    <div class="row">
-        {{ form.btn_submit(class="btn btn-info") }}
     </div>
     </form>
-
-    {% if result | length > 0 %}
-    <div class="row">
-        <h4>Drug interaction result</h4>
-
-        <!-- Display a message if there is no drug interaction -->
-        {% if result[0] == "There is no reported drug interaction" %}
-            <div class = "result-block">
-
-                    There is no reported drug interaction
-
-            </div>
-        {% else %}
-        <!-- Display a message if there is at least one drug interaction -->
-            {% for key in result %}
-                <div class = "result-block">
-                    <p class = "interaction-names">{{ key[0] }} and {{ key[1] }}</p>
-                    {{ key[3] }}
-                </div>
-            {% endfor %}
-
-        {% endif %}
-    </div>
-    {% endif %}
-</div>
 
 <!-- JQuery and JS needed for autocomplete-lhc feature;
 source: https://clinicaltables.nlm.nih.gov/apidoc/rxterms/v3/doc.html -->
