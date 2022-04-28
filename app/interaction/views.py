@@ -1,5 +1,6 @@
-from flask import render_template, redirect, url_for, flash, request, session
-from app import interaction
+from flask import render_template, flash, request, session, redirect, url_for
+from flask_login import login_required
+
 from app.interaction.forms import DrugInteractionForm
 from . import interaction
 import requests
@@ -13,7 +14,6 @@ dict_of_meds_name_rxcui = {}
 def interaction_main():
     interaction_form = DrugInteractionForm()
     interaction_list = list()
-    # session['meds_name_rxcui'] = {}
 
     # When the add button is clicked, will store the drug name and its rxcui as a dictionary
     if interaction_form.btn_add.data:
@@ -45,7 +45,7 @@ def interaction_main():
                 dict_of_meds_name_rxcui[med[0]] = med[1]
 
         if len(dict_of_meds_name_rxcui) < 2:
-            flash("Must select at least two medications to run an interaction")
+            flash("Must enter at least two medications to run an interaction")
         else:
 
             drug_string = '+'.join(list(dict_of_meds_name_rxcui.values()))
@@ -70,6 +70,8 @@ def interaction_main():
                     )
             except KeyError:
                 interaction_list.append("There is no reported drug interaction")
+
+        dict_of_meds_name_rxcui.clear()
 
     return render_template("interaction.html", form=interaction_form, list=dict_of_meds_name_rxcui,
                            result=interaction_list)

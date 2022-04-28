@@ -1,7 +1,4 @@
 import sqlite3
-
-from bs4 import BeautifulSoup
-
 path_dev = 'app/db/db.db'
 path_test = 'app/db/test.db'
 
