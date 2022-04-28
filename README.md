@@ -20,3 +20,20 @@ Features implemented:
     <li>Generate a link to the National Library of Medicine for each active medication added</li>
     <li>Run drug interactions</li>
 </ul>
+
+How to run:
+<ul>
+<li>Follow instructions to clone the repository to your local machine <a href="https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository">here</a>.</li>
+<li>Dependencies required are located in the <strong>requirements.txt</strong> file. Be sure to install these dependencies prior to running the application.</li>
+<li>Set the environmental variables. This can be done in the command line/terminal, or within the IDE. For example, in the MacOS terminal:
+<pre>
+set FLASK_APP=rx_verify.py
+set FLASK_ENV=development
+</pre>
+</li>
+<li>Run flask
+<pre>flask run</pre>
+</li>
+
+
+</ul>
