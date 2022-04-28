@@ -59,12 +59,23 @@
     <div class="row">
         <h4>Drug interaction result</h4>
 
-        {% for key in result %}
+        <!-- Display a message if there is no drug interaction -->
+        {% if result[0] == "There is no reported drug interaction" %}
             <div class = "result-block">
-                <p class = "interaction-names">{{ key[0] }} and {{ key[1] }}</p>
-                {{ key[3] }}
+
+                    There is no reported drug interaction
+
             </div>
+        {% else %}
+        <!-- Display a message if there is at least one drug interaction -->
+            {% for key in result %}
+                <div class = "result-block">
+                    <p class = "interaction-names">{{ key[0] }} and {{ key[1] }}</p>
+                    {{ key[3] }}
+                </div>
             {% endfor %}
+
+        {% endif %}
     </div>
     {% endif %}
 </div>

@@ -33,7 +33,8 @@ def interaction_main():
         remove_med = request.form['med_list']
         list_of_med_name.remove(remove_med)
 
-    # If the submit button is clicked, will show results or an error message
+    # If the submit button is clicked, will show results or an error message depending on the number of meds in the
+    # list of meds
     if interaction_form.btn_submit.data:
 
         if len(list_of_med_name) < 2:
@@ -59,13 +60,16 @@ def interaction_main():
             # Getting the drug names, interaction severity and description
             # Each interactionPair dictionary will contain a list. Each element of the list will contain a severity
             # and description.
-            for interaction in response['fullInteractionTypeGroup'][0]['fullInteractionType']:
-                interaction_list.append(
-                    [interaction['interactionPair'][0]['interactionConcept'][0]['sourceConceptItem']['name'],
-                     interaction['interactionPair'][0]['interactionConcept'][1]['sourceConceptItem']['name'],
-                     interaction['interactionPair'][0]['severity'],
-                     interaction['interactionPair'][0]['description']]
-                )
+            try:
+                for interaction in response['fullInteractionTypeGroup'][0]['fullInteractionType']:
+                    interaction_list.append(
+                        [interaction['interactionPair'][0]['interactionConcept'][0]['sourceConceptItem']['name'],
+                         interaction['interactionPair'][0]['interactionConcept'][1]['sourceConceptItem']['name'],
+                         interaction['interactionPair'][0]['severity'],
+                         interaction['interactionPair'][0]['description']]
+                    )
+            except KeyError:
+                interaction_list.append("There is no reported drug interaction")
 
     return render_template("interaction.html", form=interaction_form, list=list_of_med_name, result=interaction_list)
 
