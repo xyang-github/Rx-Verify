@@ -4,16 +4,18 @@ from app.interaction.forms import DrugInteractionForm
 from . import interaction
 import requests
 
+from ..db.database_queries import query_select
+
 dict_of_meds_name_rxcui = {}
-list_of_med_name = []
 
 
 @interaction.route('/interaction', methods=["GET", "POST"])
 def interaction_main():
     interaction_form = DrugInteractionForm()
     interaction_list = list()
+    # session['meds_name_rxcui'] = {}
 
-    # When the add button is clicked, will store the drug name and its rxcui as a dictionary in a list
+    # When the add button is clicked, will store the drug name and its rxcui as a dictionary
     if interaction_form.btn_add.data:
         med_name = request.form['rxterms']
 
@@ -24,31 +26,29 @@ def interaction_main():
             # Create a dictionary of med name and its rxcui
             dict_of_meds_name_rxcui[med_name] = get_rxcui(med_name)
 
-            # Add med name to the med name list if it's not already there
-            if med_name not in list_of_med_name:
-                list_of_med_name.append(med_name)
-
     # If the remove button is clicked, will remove the selected med name
     if interaction_form.btn_remove.data:
         remove_med = request.form['med_list']
-        list_of_med_name.remove(remove_med)
+        dict_of_meds_name_rxcui.pop(remove_med, None)
 
-    # If the submit button is clicked, will show results or an error message depending on the number of meds in the
-    # list of meds
+    # If the submit button is clicked, will show results or an error message depending on the number of meds
     if interaction_form.btn_submit.data:
 
-        if len(list_of_med_name) < 2:
+        # If the checkbox to include active medications is checked, will add medication and its rxcui to the dictionary
+        include_rx = request.form.get('include_rx')
+        if include_rx is not None:
+            active_med = query_select(
+                query="SELECT med_name, rxcui FROM active_med WHERE patient_id = (?)",
+                key=session['patient_id']
+            )
+            for med in active_med:
+                dict_of_meds_name_rxcui[med[0]] = med[1]
+
+        if len(dict_of_meds_name_rxcui) < 2:
             flash("Must select at least two medications to run an interaction")
         else:
 
-            # Contains a list of rxcui, which will be used in the web api
-            list_of_rxcui = []
-
-            # Get a list of rxcui from the list of medication names
-            for med in list_of_med_name:
-                list_of_rxcui.append(dict_of_meds_name_rxcui[med])
-
-            drug_string = '+'.join(list_of_rxcui)
+            drug_string = '+'.join(list(dict_of_meds_name_rxcui.values()))
 
             # Construct request url
             url_base = "https://rxnav.nlm.nih.gov"
@@ -71,7 +71,8 @@ def interaction_main():
             except KeyError:
                 interaction_list.append("There is no reported drug interaction")
 
-    return render_template("interaction.html", form=interaction_form, list=list_of_med_name, result=interaction_list)
+    return render_template("interaction.html", form=interaction_form, list=dict_of_meds_name_rxcui,
+                           result=interaction_list)
 
 
 def get_rxcui(med_name):
