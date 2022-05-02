@@ -1,3 +1,5 @@
+import sqlite3
+
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from config import *
@@ -37,5 +39,13 @@ def create_app(config_name):
 
     from .interaction import interaction as interaction_blueprint
     app.register_blueprint(interaction_blueprint)
+
+    # Creates the database file
+    with app.open_resource('db/schema.sql', mode='r') as f:
+        con = sqlite3.connect('app/db/db.db')
+        cur = con.cursor()
+        cur.executescript(f.read())
+        con.commit()
+        con.close()
 
     return app

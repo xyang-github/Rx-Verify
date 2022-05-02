@@ -12,7 +12,7 @@ from datetime import datetime, date
 @profile.route('/profile', methods=["GET", "POST"])
 @login_required
 def profile_main():
-    """Display profile page"""
+    """View function for the pain profile page"""
 
     profile_form = PatientProfileForm()
 
