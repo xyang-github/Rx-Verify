@@ -103,5 +103,29 @@
             </div>
             <div class="col-md-2"></div>
         </div>
+
+        <div class="row row_margin">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='img/interaction.png') }}" style="width: 100%;"
+                     alt="picture of the interaction page">
+            </div>
+            <div class="col-md-4">
+                <div>
+                    The medication interaction tool consists of a text field to type in the name of the medication.
+                    Once you have typed and selected the medication of interest, click on the Add button. For patients
+                    with an account, you can click on the checkbox to include active medications without having to type
+                    them into the text field.
+
+                    You can also remove medications that you have previously added. Simply click on the medication name
+                    and click the Remove button.
+
+                    Clicking on the Submit button will run the interaction tool and display
+                    the result. This will also clear the previously added medications.
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
     </div>
 {% endblock %}
