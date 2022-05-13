@@ -353,8 +353,6 @@ def active_medication_edit(active_med_id):
             key=active_med_id
         )
 
-        print(active_med)
-
         # Add new entry into historical medication table
         query_change(
             query="INSERT INTO hist_med (patient_id, med_name, med_dose, med_directions, med_end_date, comment, rxcui)"
@@ -366,7 +364,7 @@ def active_medication_edit(active_med_id):
         # Delete entry from active medication table
         query_change(
             query="DELETE FROM active_med WHERE active_med_id = (?)",
-            key=str(active_med_id)
+            key=(str(active_med_id),)
         )
 
         flash("Active medication has been moved historical medications")
@@ -566,7 +564,7 @@ def active_medication_delete(active_med_id):
     if delete_medication_form.confirm_btn.data:
         query_change(
             query="DELETE FROM active_med WHERE active_med_id = (?)",
-            key=str(active_med_id)
+            key=(str(active_med_id),)
         )
 
         flash("Medication entry has been deleted")
@@ -599,7 +597,7 @@ def historical_medication_delete(historical_med_id):
     if delete_medication_form.confirm_btn.data:
         query_change(
             query="DELETE FROM hist_med WHERE hist_med_id = (?)",
-            key=str(historical_med_id)
+            key=(str(historical_med_id),)
         )
 
         flash("Medication entry has been deleted")
